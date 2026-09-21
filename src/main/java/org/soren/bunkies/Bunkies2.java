@@ -6,6 +6,8 @@ public final class Bunkies2 extends JavaPlugin {
 
     @Override
     public void onEnable() {
+         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
+                event -> ModCommands.register(event.registrar()));
 
     }
 
