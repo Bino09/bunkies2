@@ -13,7 +13,7 @@ public class ModCommands {
         commands.register(
                 Commands.literal("soren")
                         .then(Commands.literal("genTeams")
-                                .requires(src -> src.getSender().hasPermission("bunkies.genteams"))
+                                .requires(src -> src.getSender().isOp())
                                 .then(Commands.argument("x", IntegerArgumentType.integer(0))
                                         .executes(ModCommands::genTeamsCommand)))
                         .build()
