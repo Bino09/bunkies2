@@ -1,6 +1,7 @@
 package org.soren.bunkies;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Bunkies2 extends JavaPlugin {
@@ -11,5 +12,14 @@ public class Bunkies2 extends JavaPlugin {
                 event -> ModCommands.register(event.registrar()));
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 event -> ModCommands.register(event.registrar()));
+        TeamManager.registerTeam("atk");
+        TeamManager.registerTeam("def");
+        this.getServer().getPluginManager().registerEvents(new armourListener(), this);
+    }
+
+
+    @Override
+    public void onDisable() {
+        TeamManager.unregisterTeams();
     }
 }

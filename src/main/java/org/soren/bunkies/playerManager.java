@@ -5,12 +5,19 @@ package org.soren.bunkies;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+
+
+
 
 enum ePriority {
     RANDOM,
@@ -19,6 +26,7 @@ enum ePriority {
 }
 
 public class playerManager {
+
 
 
     public record Teams(List<Player> def, List<Player> atk) {
@@ -44,10 +52,14 @@ public class playerManager {
         atk.addAll(players);
 
         for (Player player : def) {
-            player.sendMessage(Component.text("You are on def"));
+            player.sendMessage(Component.text("You are on the Defenders", TextColor.fromHexString("#5555FF")));
+            TeamManager.addDef(player);
+
         }
         for (Player player : atk) {
-            player.sendMessage(Component.text("You are on atk"));
+            player.sendMessage(Component.text("You are on the Attackers", TextColor.fromHexString("#FF5555")));
+            TeamManager.addAtk(player);
+
         }
         team = new Teams(def, atk);
         return team;
