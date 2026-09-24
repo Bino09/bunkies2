@@ -3,6 +3,7 @@ package org.soren.bunkies;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -30,6 +31,7 @@ public class TeamManager {
         Team def = board.getTeam("def");
         def.color(NamedTextColor.BLUE);
         def.prefix(Component.text("[Def] "));
+        player.sendMessage(Component.text("You are on the Defenders", TextColor.fromHexString("#5555FF")));
 
         def.addPlayer(player);
 
@@ -40,11 +42,28 @@ public class TeamManager {
         Team atk = board.getTeam("atk");
         atk.color(NamedTextColor.RED);
         atk.prefix(Component.text("[Atk] "));
+        player.sendMessage(Component.text("You are on the Attackers", TextColor.fromHexString("#FF5555")));
 
         atk.addPlayer(player);
 
 
 
+    }
+    public static void swapPlayer(Player player){
+        Team def = board.getTeam("def");
+        Team atk = board.getTeam("atk");
+
+        if(def.hasPlayer(player)) {
+            def.removePlayer(player);
+            addAtk(player);
+            playerManager.swapDef(player);
+
+        } else if (atk.hasPlayer(player)) {
+            atk.removePlayer(player);
+            addDef(player);
+            playerManager.swapAtk(player);
+            
+        }
     }
 
 }

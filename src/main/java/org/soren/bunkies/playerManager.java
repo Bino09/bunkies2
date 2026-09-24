@@ -52,12 +52,12 @@ public class playerManager {
         atk.addAll(players);
 
         for (Player player : def) {
-            player.sendMessage(Component.text("You are on the Defenders", TextColor.fromHexString("#5555FF")));
+
             TeamManager.addDef(player);
 
         }
         for (Player player : atk) {
-            player.sendMessage(Component.text("You are on the Attackers", TextColor.fromHexString("#FF5555")));
+
             TeamManager.addAtk(player);
 
         }
@@ -71,7 +71,20 @@ public class playerManager {
     public static List<Player> getDef() {
         return team.def;
     }
+    public static void swapAtk(Player player) { //remove atk add def
+        List<Player> atk = getAtk();
+        List<Player> def = getDef();
+        atk.remove(player);
+        def.add(player);
 
+    }
+    public static void swapDef(Player player) { //remove def add atk
+        List<Player> atk = getAtk();
+        List<Player> def = getDef();
+        def.remove(player);
+        atk.add(player);
+
+    }
 
     public static void listTeams(Player player){
         String atk_team = "";

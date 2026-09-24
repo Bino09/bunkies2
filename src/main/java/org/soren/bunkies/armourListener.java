@@ -47,9 +47,9 @@ public class armourListener implements Listener {
 
 
         if(!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]")) {
-            player.sendMessage(Component.text("Naughty"));
+
             if (defEntries.contains(player.getName())) {
-                player.sendMessage(Component.text("success"));
+
                 ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
                 meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
                 newBoots.setItemMeta(meta);
@@ -64,7 +64,7 @@ public class armourListener implements Listener {
             }
         }
             else if (!pants.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]")) {
-            player.sendMessage(Component.text("Naughty"));
+
             if (defEntries.contains(player.getName())) {
                 ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
                 meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
@@ -80,7 +80,7 @@ public class armourListener implements Listener {
             }
         }
         if (!chestplate.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]")) {
-            player.sendMessage(Component.text("Naughty"));
+
             if (defEntries.contains(player.getName())) {
                         ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
                         meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
