@@ -85,6 +85,18 @@ public class playerManager {
         atk.add(player);
 
     }
+    public static void addDef(Player player) { //remove def add atk
+        List<Player> def = getDef();
+        def.add(player);
+
+
+    }
+    public static void addAtk(Player player) { //remove def add atk
+        List<Player> atk = getAtk();
+        atk.add(player);
+
+
+    }
 
     public static void listTeams(Player player){
         String atk_team = "";

@@ -42,8 +42,32 @@ public class ModCommands {
 
                                             return 1;
                                         })))
+                                .then(Commands.literal("AddPlayer")
+                                        .requires(src -> src.getSender().isOp())
+                                        .then(Commands.literal("atk")
+                                                .then(Commands.argument("player", ArgumentTypes.player())
+
+                                                    .executes(ctx -> {
+                                                        PlayerSelectorArgumentResolver resolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
+                                                        Player player = resolver.resolve((ctx.getSource())).getFirst();
+                                                        TeamManager.addAtk(player);
+
+                                                        return 1;
+                                                    })))
+                                        .then(Commands.literal("def")
+                                                .then(Commands.argument("player", ArgumentTypes.player())
+                                                        .executes(ctx -> {
+                                                            PlayerSelectorArgumentResolver resolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
+                                                            Player player = resolver.resolve((ctx.getSource())).getFirst();
+                                                            TeamManager.addDef(player);
+                                                            playerManager.addDef(player);
+
+                                                            return 1;
+                                                        }))))
                         .build()
-        );
+
+         );
+
     }
 
 
