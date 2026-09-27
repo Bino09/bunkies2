@@ -3,23 +3,26 @@ package org.soren.bunkies;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.scoreboard.Team;
+import org.soren.bunkies.managers.LivesManager;
+import org.soren.bunkies.managers.TeamManager;
+import org.soren.bunkies.managers.playerManager;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Set;
 
 
-public class armourListener implements Listener {
+public class modListener implements Listener {
 
 
     @EventHandler
@@ -40,12 +43,18 @@ public class armourListener implements Listener {
         Set<String> atkEntries = atk.getEntries();
         assert def != null;
         Set<String> defEntries = def.getEntries();
-        String boots = player.getEquipment().getBoots().getItemMeta().getAsComponentString();
-        String pants = player.getEquipment().getLeggings().getItemMeta().getAsComponentString();
-        String chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
-        String helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
-
-
+        String boots = "";
+        String pants = "";
+        String chestplate = "";
+        String helmet = "";
+        try {
+            boots = player.getEquipment().getBoots().getItemMeta().getAsComponentString();
+            pants = player.getEquipment().getLeggings().getItemMeta().getAsComponentString();
+            chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
+            helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         if(!boots.equals(!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]"))) {
 
             if (defEntries.contains(player.getName())) {
@@ -115,6 +124,28 @@ public class armourListener implements Listener {
 
                 }
             }
+            @EventHandler
+
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+        String killer = event.getDamageSource().getCausingEntity().getName();
+        if(playerManager.getAtk().contains(player)) {
+            if(playerManager.getDef().contains(killer)) {
+                LivesManager.validDeath(player.getUniqueId());
+                player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
+            }
+        }
+        if(playerManager.getDef().contains(player)) {
+            if(playerManager.getAtk().contains(killer)) {
+                LivesManager.validDeath(player.getUniqueId());
+                player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
+            }
+        }
+
+
+
+    }
         }
 
 

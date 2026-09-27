@@ -1,20 +1,26 @@
-package org.soren.bunkies;
+package org.soren.bunkies.managers;
 
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+
+
 public class TeamManager {
-    static Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+    public static Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+
+
     public static Team registerTeam(String team_name) {
 
 
         Team team = board.registerNewTeam(team_name);
+
 
         return team;
 
@@ -32,7 +38,7 @@ public class TeamManager {
         def.color(NamedTextColor.BLUE);
         def.prefix(Component.text("[Def] "));
         player.sendMessage(Component.text("You are on the Defenders", TextColor.fromHexString("#5555FF")));
-
+        player.teleport(new Location(player.getWorld(), 0, 100 ,0));
         def.addPlayer(player);
 
 
@@ -43,7 +49,7 @@ public class TeamManager {
         atk.color(NamedTextColor.RED);
         atk.prefix(Component.text("[Atk] "));
         player.sendMessage(Component.text("You are on the Attackers", TextColor.fromHexString("#FF5555")));
-
+        player.teleport(new Location(player.getWorld(), 100, 100 ,100));
         atk.addPlayer(player);
 
 
@@ -55,13 +61,17 @@ public class TeamManager {
 
         if(def.hasPlayer(player)) {
             def.removePlayer(player);
+
             addAtk(player);
             playerManager.swapDef(player);
 
+
         } else if (atk.hasPlayer(player)) {
             atk.removePlayer(player);
+
             addDef(player);
             playerManager.swapAtk(player);
+
             
         }
     }

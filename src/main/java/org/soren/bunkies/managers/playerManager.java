@@ -1,29 +1,19 @@
-package org.soren.bunkies;
+package org.soren.bunkies.managers;
 
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Entity;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 
-
-
-
-
-enum ePriority {
-    RANDOM,
-    DEF,
-    ATK;
-}
 
 public class playerManager {
 
@@ -35,6 +25,7 @@ public class playerManager {
 
     public static Teams genTeams(int numberOfDefenders) {
         List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+        LivesManager.startGame(players);
 
         players.removeIf(Player::isOp);
 
@@ -46,7 +37,8 @@ public class playerManager {
             int index = r.nextInt(players.size());
             def.add(players.get(index));
             players.remove(index);
-            System.out.println(def);
+
+
 
         }
         atk.addAll(players);
@@ -54,6 +46,9 @@ public class playerManager {
         for (Player player : def) {
 
             TeamManager.addDef(player);
+
+
+
 
         }
         for (Player player : atk) {
@@ -117,5 +112,6 @@ public class playerManager {
         player.sendMessage(Component.text("Atk: " + atk_team + "Def: " + def_team));
 
     }
+
 }
 
