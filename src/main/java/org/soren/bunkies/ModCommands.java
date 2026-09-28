@@ -8,15 +8,20 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.soren.bunkies.managers.LivesManager;
 import org.soren.bunkies.managers.TeamManager;
 import org.soren.bunkies.managers.playerManager;
 
 public class ModCommands {
 
+
     public static void register(Commands commands) {
-        commands.register(
+                Bunkies2 plugin = JavaPlugin.getPlugin(Bunkies2.class);
+                commands.register(
                 Commands.literal("soren")
                         .then(Commands.literal("genTeams")
                                 .requires(src -> src.getSender().isOp())
@@ -30,6 +35,17 @@ public class ModCommands {
                                 .executes(ctx -> {
                                     ctx.getSource().getSender().sendMessage(Component.text("You have: " + LivesManager.getLives(ctx.getSource().getSender().getServer().getPlayerUniqueId(ctx.getSource().getSender().getName())) + " Lives", TextColor.fromHexString("#f0bf3a")));
                                 return 1;
+                                }))
+                        .then(Commands.literal("warpdef")
+                                .requires(src -> src.getSender().isOp())
+                                .executes(ctx -> {
+                                    Player player = (Player) ctx.getSource().getSender();
+                                    plugin.getConfig().set(".world",player.getWorld().getName());
+                                    plugin.getConfig().set(".x",player.getX());
+                                    plugin.getConfig().set(".y",player.getY());
+                                    plugin.getConfig().set(".z",player.getZ());
+                                    plugin.saveConfig();
+                                    return 1;
                                 }))
                         .then(Commands.literal("teamlist")
                                 .executes(ctx -> {

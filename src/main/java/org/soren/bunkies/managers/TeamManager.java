@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
+import org.soren.bunkies.Bunkies2;
 
 
 public class TeamManager {
@@ -40,6 +40,7 @@ public class TeamManager {
         player.sendMessage(Component.text("You are on the Defenders", TextColor.fromHexString("#5555FF")));
         player.teleport(new Location(player.getWorld(), 0, 100 ,0));
         def.addPlayer(player);
+
 
 
 

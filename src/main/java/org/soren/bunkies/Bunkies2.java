@@ -15,6 +15,7 @@ public class Bunkies2 extends JavaPlugin {
         TeamManager.registerTeam("atk");
         TeamManager.registerTeam("def");
         this.getServer().getPluginManager().registerEvents(new modListener(), this);
+        saveDefaultConfig();
     }
 
 
