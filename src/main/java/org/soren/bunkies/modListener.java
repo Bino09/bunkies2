@@ -2,6 +2,7 @@ package org.soren.bunkies;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -129,15 +130,21 @@ public class modListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
-        String killer = event.getDamageSource().getCausingEntity().getName();
+        Entity killer = event.getDamageSource().getCausingEntity();
         if(playerManager.getAtk().contains(player)) {
+
+
             if(playerManager.getDef().contains(killer)) {
+                killer.sendMessage(Component.text("Successful kill on" + playerName, TextColor.fromHexString("#5555FF")));
                 LivesManager.validDeath(player.getUniqueId());
                 player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
             }
         }
         if(playerManager.getDef().contains(player)) {
+
+
             if(playerManager.getAtk().contains(killer)) {
+                killer.sendMessage(Component.text("Successful kill on" + playerName, TextColor.fromHexString("#FF5555")));
                 LivesManager.validDeath(player.getUniqueId());
                 player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
             }
