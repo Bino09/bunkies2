@@ -24,12 +24,19 @@ public class LivesManager {
         life -= 1;
         lives.remove(uuid);
         lives.put(uuid, life);
-        System.out.println(life);
+
 
     }
     public static int getLives(UUID uuid) {
        int numberLives = lives.get(uuid);
 
         return numberLives;
+    }
+    public static void setLives(UUID uuid, int amount) {
+        int life = lives.get(uuid);
+        life = amount;
+        lives.remove(uuid);
+        lives.put(uuid,life);
+
     }
 }

@@ -36,6 +36,20 @@ public class ModCommands {
                                     ctx.getSource().getSender().sendMessage(Component.text("You have: " + LivesManager.getLives(ctx.getSource().getSender().getServer().getPlayerUniqueId(ctx.getSource().getSender().getName())) + " Lives", TextColor.fromHexString("#f0bf3a")));
                                 return 1;
                                 }))
+                        .then(Commands.literal("setLives")
+                                .requires(src->src.getSender().isOp())
+                                .then(Commands.argument("x", IntegerArgumentType.integer(0))
+                                        .then(Commands.argument("player", ArgumentTypes.player())
+                                                .executes(ctx->{
+
+                                                    int x = ctx.getArgument("x", int.class);
+                                                    PlayerSelectorArgumentResolver resolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
+                                                    Player player = resolver.resolve(ctx.getSource()).getFirst();
+                                                    LivesManager.setLives(player.getUniqueId(), x);
+                                                    player.sendMessage(Component.text("Your lives have been set to: " + LivesManager.getLives(player.getUniqueId()), TextColor.fromHexString("#f0bf3a")));
+                                                    return 1;
+
+                                                }))))
                         .then(Commands.literal("warpdef")
                                 .requires(src -> src.getSender().isOp())
                                 .executes(ctx -> {

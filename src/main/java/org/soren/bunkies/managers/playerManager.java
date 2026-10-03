@@ -32,7 +32,6 @@ public class playerManager {
         Random r = new Random();
         List<Player> atk = new ArrayList<>();
         List<Player> def = new ArrayList<>();
-        System.out.println(players);
         for (int i = 0; i < numberOfDefenders; i++) {
             int index = r.nextInt(players.size());
             def.add(players.get(index));
