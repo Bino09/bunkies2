@@ -33,7 +33,7 @@ public class modListener implements Listener {
 
 
     @EventHandler
-    public void onEquipArmour(PlayerArmorChangeEvent event) {
+    public void onEquipArmour(PlayerArmorChangeEvent event) throws Exception {
         ItemStack newBoots = new ItemStack(Material.DIAMOND_BOOTS);
         ItemStack newPants = new ItemStack(Material.DIAMOND_LEGGINGS);
         ItemStack newChest = new ItemStack(Material.DIAMOND_CHESTPLATE);
@@ -47,18 +47,12 @@ public class modListener implements Listener {
         Set<String> atkEntries = atk.getEntries();
         assert def != null;
         Set<String> defEntries = def.getEntries();
-        String boots = "";
-        String pants = "";
-        String chestplate = "";
-        String helmet = "";
-        try {
-            boots = player.getEquipment().getBoots().getItemMeta().getAsComponentString();
-            pants = player.getEquipment().getLeggings().getItemMeta().getAsComponentString();
-            chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
-            helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        String boots = player.getEquipment().getBoots().getItemMeta().getAsComponentString();
+        String pants = player.getEquipment().getLeggings().getItemMeta().getAsComponentString();
+        String chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
+        String helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
+
         if (!boots.equals(!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]"))) {
 
             if (defEntries.contains(player.getName())) {
@@ -158,27 +152,24 @@ public class modListener implements Listener {
 
 
     }
+
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         FileConfiguration config = JavaPlugin.getPlugin(Bunkies2.class).getConfig();
         Player player = event.getPlayer();
         if (playerManager.getAtk().contains(player)) {
             Location location = config.getLocation("warps.atk");
-            int x = ((int) location.getX());
-            int y = ((int) location.getY());
-            int z = ((int) location.getZ());
-            player.teleport(new Location(player.getWorld(), x, y ,z));
+
+            event.setRespawnLocation(location);
         }
         if (playerManager.getDef().contains(player)) {
             Location location = config.getLocation("warps.def");
-            int x = ((int) location.getX());
-            int y = ((int) location.getY());
-            int z = ((int) location.getZ());
-            player.sendMessage(Component.text(x+" "+y+" "+z));
-            player.teleport(new Location(player.getWorld(), x, y ,z));
+
+            event.setRespawnLocation(location);
         }
 
     }
+
 
 }
 

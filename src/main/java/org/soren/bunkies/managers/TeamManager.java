@@ -44,7 +44,8 @@ public class TeamManager {
         def.color(NamedTextColor.BLUE);
         def.prefix(Component.text("[Def] "));
         player.sendMessage(Component.text("You are on the Defenders", TextColor.fromHexString("#5555FF")));
-        player.teleport(new Location(player.getWorld(), x, y ,z));
+        player.teleport(location);
+
 
         def.addPlayer(player);
 
@@ -54,15 +55,12 @@ public class TeamManager {
     }
     public static void addAtk(Player player) {
         Location location = config.getLocation("warps.atk");
-        int x = ((int) location.getX());
-        int y = ((int) location.getY());
-        int z = ((int) location.getZ());
         Team atk = board.getTeam("atk");
         atk.color(NamedTextColor.RED);
         atk.prefix(Component.text("[Atk] "));
         player.sendMessage(Component.text("You are on the Attackers", TextColor.fromHexString("#FF5555")));
 
-        player.teleport(new Location(player.getWorld(),x,y,z));
+        player.teleport(location);
         atk.addPlayer(player);
 
 
