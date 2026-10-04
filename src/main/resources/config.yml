@@ -393,16 +393,16 @@ warps:
   atk:
     ==: org.bukkit.Location
     world: world
-    x: -168.41054656979514
-    y: 310.0625
+    x: 20
+    y: 115
     z: 6.513769978855627
     pitch: -2.0999794
     yaw: -89.40405
   def:
     ==: org.bukkit.Location
     world: world
-    x: 130.47424864858232
-    y: 310.0625
+    x: 5
+    y: 115
     z: 5.492714195029483
     pitch: 3.5999775
     yaw: 89.68945

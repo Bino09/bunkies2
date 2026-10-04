@@ -4,17 +4,21 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 import org.soren.bunkies.managers.LivesManager;
 import org.soren.bunkies.managers.TeamManager;
@@ -27,15 +31,13 @@ import java.util.Set;
 public class modListener implements Listener {
 
 
+
     @EventHandler
     public void onEquipArmour(PlayerArmorChangeEvent event) {
         ItemStack newBoots = new ItemStack(Material.DIAMOND_BOOTS);
         ItemStack newPants = new ItemStack(Material.DIAMOND_LEGGINGS);
         ItemStack newChest = new ItemStack(Material.DIAMOND_CHESTPLATE);
         ItemStack newHelmet = new ItemStack(Material.DIAMOND_HELMET);
-
-
-
 
 
         Player player = event.getPlayer();
@@ -57,7 +59,7 @@ public class modListener implements Listener {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        if(!boots.equals(!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]"))) {
+        if (!boots.equals(!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]"))) {
 
             if (defEntries.contains(player.getName())) {
 
@@ -74,7 +76,7 @@ public class modListener implements Listener {
 
             }
         }
-            if (!pants.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !pants.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
+        if (!pants.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !pants.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
 
             if (defEntries.contains(player.getName())) {
                 ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
@@ -96,11 +98,11 @@ public class modListener implements Listener {
         if (!chestplate.equals(!helmet.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !chestplate.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]"))) {
 
             if (defEntries.contains(player.getName())) {
-                        ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
-                        meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                        newChest.setItemMeta(meta);
-                        player.getEquipment().setChestplate(newChest);
-                    }
+                ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
+                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
+                newChest.setItemMeta(meta);
+                player.getEquipment().setChestplate(newChest);
+            }
             if (atkEntries.contains(player.getName())) {
                 ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
                 meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
@@ -108,14 +110,14 @@ public class modListener implements Listener {
                 player.getEquipment().setChestplate(newChest);
 
             }
-                }
+        }
         if (!helmet.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !helmet.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
-            if(defEntries.contains(player.getName())) {
-                        ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
-                        meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                        newHelmet.setItemMeta(meta);
-                        player.getEquipment().setHelmet(newHelmet);
-                    }
+            if (defEntries.contains(player.getName())) {
+                ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
+                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
+                newHelmet.setItemMeta(meta);
+                player.getEquipment().setHelmet(newHelmet);
+            }
             if (atkEntries.contains(player.getName())) {
                 ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
                 meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
@@ -124,40 +126,61 @@ public class modListener implements Listener {
 
             }
 
-                }
-            }
-            @EventHandler
+        }
+    }
+
+    @EventHandler
 
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
         Entity killer = event.getDamageSource().getCausingEntity();
-        if(playerManager.getAtk().contains(player)) {
+        if (playerManager.getAtk().contains(player)) {
 
-
-            if(playerManager.getDef().contains(killer)) {
+            if (playerManager.getDef().contains(killer)) {
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#5555FF")));
                 LivesManager.validDeath(player.getUniqueId());
                 player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
             }
         }
-        if(playerManager.getDef().contains(player)) {
+        if (playerManager.getDef().contains(player)) {
 
 
-            if(playerManager.getAtk().contains(killer)) {
+            if (playerManager.getAtk().contains(killer)) {
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#FF5555")));
                 LivesManager.validDeath(player.getUniqueId());
                 player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
             }
         }
-        if(LivesManager.getLives(player.getUniqueId()) <= 0) {
+        if (LivesManager.getLives(player.getUniqueId()) <= 0) {
             player.setGameMode(GameMode.SPECTATOR);
         }
 
 
+    }
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        FileConfiguration config = JavaPlugin.getPlugin(Bunkies2.class).getConfig();
+        Player player = event.getPlayer();
+        if (playerManager.getAtk().contains(player)) {
+            Location location = config.getLocation("warps.atk");
+            int x = ((int) location.getX());
+            int y = ((int) location.getY());
+            int z = ((int) location.getZ());
+            player.teleport(new Location(player.getWorld(), x, y ,z));
+        }
+        if (playerManager.getDef().contains(player)) {
+            Location location = config.getLocation("warps.def");
+            int x = ((int) location.getX());
+            int y = ((int) location.getY());
+            int z = ((int) location.getZ());
+            player.sendMessage(Component.text(x+" "+y+" "+z));
+            player.teleport(new Location(player.getWorld(), x, y ,z));
+        }
 
     }
-        }
+
+}
 
 
 

@@ -9,6 +9,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSele
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +21,7 @@ public class ModCommands {
 
 
     public static void register(Commands commands) {
+                FileConfiguration config = JavaPlugin.getPlugin(Bunkies2.class).getConfig();
                 Bunkies2 plugin = JavaPlugin.getPlugin(Bunkies2.class);
                 commands.register(
                 Commands.literal("soren")
@@ -50,17 +52,25 @@ public class ModCommands {
                                                     return 1;
 
                                                 }))))
-                        .then(Commands.literal("warpdef")
-                                .requires(src -> src.getSender().isOp())
-                                .executes(ctx -> {
-                                    Player player = (Player) ctx.getSource().getSender();
-                                    plugin.getConfig().set(".world",player.getWorld().getName());
-                                    plugin.getConfig().set(".x",player.getX());
-                                    plugin.getConfig().set(".y",player.getY());
-                                    plugin.getConfig().set(".z",player.getZ());
-                                    plugin.saveConfig();
-                                    return 1;
-                                }))
+                        .then(Commands.literal("setWarp")
+                                .then(Commands.literal("def")
+                                        .requires(src -> src.getSender().isOp())
+                                        .executes(ctx -> {
+                                            Player player = (Player) ctx.getSource().getSender();
+                                            config.set("warps.def", player.getLocation());
+                                            plugin.saveConfig();
+                                            return 1;
+                                        }))
+                                .then(Commands.literal("atk")
+                                        .requires(src -> src.getSender().isOp())
+                                        .executes(ctx -> {
+                                            Player player = (Player) ctx.getSource().getSender();
+                                            config.set("warps.atk", player.getLocation());
+                                            plugin.saveConfig();
+                                            return 1;
+                                        })))
+
+
                         .then(Commands.literal("teamlist")
                                 .executes(ctx -> {
                                     playerManager.listTeams((Player) ctx.getSource().getSender());
