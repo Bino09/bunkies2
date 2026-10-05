@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -36,15 +37,21 @@ public class TeamManager {
 
     }
     public static void addDef(Player player) {
-        Location location = config.getLocation("warps.def");
-        int x = ((int) location.getX());
-        int y = ((int) location.getY());
-        int z = ((int) location.getZ());
+        Location def1 = config.getLocation("warps.def1");
+        Location defwarp = config.getLocation("warps.def");
         Team def = board.getTeam("def");
         def.color(NamedTextColor.BLUE);
         def.prefix(Component.text("[Def] "));
         player.sendMessage(Component.text("You are on the Defenders", TextColor.fromHexString("#5555FF")));
-        player.teleport(location);
+        if (GameManager.getGameStatus() == 1) {
+            player.teleport(defwarp);
+
+        }
+        else {
+            player.teleport(def1);
+
+        }
+        player.setGameMode(GameMode.SURVIVAL);
 
 
         def.addPlayer(player);
@@ -54,13 +61,22 @@ public class TeamManager {
 
     }
     public static void addAtk(Player player) {
-        Location location = config.getLocation("warps.atk");
+        Location atk1 = config.getLocation("warps.atk1");
+        Location atkwarp = config.getLocation("warps.atk");
+
         Team atk = board.getTeam("atk");
         atk.color(NamedTextColor.RED);
         atk.prefix(Component.text("[Atk] "));
         player.sendMessage(Component.text("You are on the Attackers", TextColor.fromHexString("#FF5555")));
+        player.setGameMode(GameMode.SURVIVAL);
+        if (GameManager.getGameStatus() == 1) {
+            player.teleport(atkwarp);
 
-        player.teleport(location);
+        }
+        else {
+            player.teleport(atk1);
+
+        }
         atk.addPlayer(player);
 
 
