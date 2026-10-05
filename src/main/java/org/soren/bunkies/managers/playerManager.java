@@ -26,6 +26,7 @@ public class playerManager {
     public static Teams genTeams(int numberOfDefenders) {
         List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
         LivesManager.startGame(players);
+        StatManager.startGame(players);
 
         players.removeIf(Player::isOp);
 
