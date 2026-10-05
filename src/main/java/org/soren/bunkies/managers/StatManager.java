@@ -20,9 +20,9 @@ public class StatManager {
     int deaths = (2 - deathTracker.get(player);)
     int kills = killTracker.get(player);
     float kd = (kills / deaths)f;
-    player.sendMessage(Component.text("You have died: " + deaths + " times");
-    player.sendMessage(Component.text("You have: " + kills + " kills");
-    player.sendMessage(Component.text("Your K/D is " + kd);
+    player.sendMessage(Component.text("You have died: " + deaths + " times", TextColor.fromHexString("#1DF251"));
+    player.sendMessage(Component.text("You have: " + kills + " kills", TextColor.fromHexString("#1DF251"));
+    player.sendMessage(Component.text("Your K/D is " + kd, TextColor.fromHexString("#1DF251"));
     
   }
   public static void updateKills(Player player) {
