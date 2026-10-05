@@ -33,6 +33,11 @@ public class ModCommands {
                                             playerManager.genTeams(x);
                                             return  Command.SINGLE_SUCCESS;
                                         })))
+                        .then(Commands.literal("stats")
+                                .executes(ctx -> {
+                                    StatManager.getStats(player);
+                                return 1;
+                              }))
                         .then(Commands.literal("lives")
                                 .executes(ctx -> {
                                     ctx.getSource().getSender().sendMessage(Component.text("You have: " + LivesManager.getLives(ctx.getSource().getSender().getServer().getPlayerUniqueId(ctx.getSource().getSender().getName())) + " Lives", TextColor.fromHexString("#f0bf3a")));

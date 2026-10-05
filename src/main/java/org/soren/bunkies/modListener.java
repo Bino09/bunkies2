@@ -133,6 +133,8 @@ public class modListener implements Listener {
 
             if (playerManager.getDef().contains(killer)) {
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#5555FF")));
+                StatManager.updateDeaths(player);
+                StatManager.updateKills(killer);
                 LivesManager.validDeath(player.getUniqueId());
                 player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
             }
@@ -143,6 +145,8 @@ public class modListener implements Listener {
             if (playerManager.getAtk().contains(killer)) {
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#FF5555")));
                 LivesManager.validDeath(player.getUniqueId());
+                StatManager.updateDeaths(player);
+                StatManager.updateKills(killer);
                 player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
             }
         }
