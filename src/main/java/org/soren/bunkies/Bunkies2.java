@@ -12,10 +12,11 @@ public class Bunkies2 extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        SaveDefaultConfig();
          getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
-                event -> ModCommands.register(event.registrar()));
+                event -> ModCommands.register(event.registrar(), this));
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
-                event -> ModCommands.register(event.registrar()));
+                event -> ModCommands.register(event.registrar(), this));
         TeamManager.registerTeam("atk");
         TeamManager.registerTeam("def");
         this.getServer().getPluginManager().registerEvents(new modListener(), this);
