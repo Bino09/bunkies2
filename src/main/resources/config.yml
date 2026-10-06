@@ -4,3 +4,70 @@ kits:
   users:
   kitsList: []
   kits:
+warps:
+  atk:
+    ==: org.bukkit.Location
+    world: world
+    x: -168.41054656979514
+    y: 310.0625
+    z: 6.513769978855627
+    pitch: -2.0999794
+    yaw: -89.40405
+  def:
+    ==: org.bukkit.Location
+    world: world
+    x: 130.47424864858232
+    y: 310.0625
+    z: 5.492714195029483
+    pitch: 3.5999775
+    yaw: 89.68945
+  atk1:
+    ==: org.bukkit.Location
+    world: world
+    x: 130.47424864858232
+    y: 310.0625
+    z: 5.492714195029483
+    pitch: 3.5999775
+    yaw: 89.68945
+  def1:
+    ==: org.bukkit.Location
+    world: world
+    x: 130.47424864858232
+    y: 310.0625
+    z: 5.492714195029483
+    pitch: 3.5999775
+    yaw: 89.68945
+zones:
+  atk1:
+    ==: org.bukkit.Location
+    world: world
+    x: -168.41054656979514
+    y: 310.0625
+    z: 6.513769978855627
+    pitch: -2.0999794
+    yaw: -89.40405
+  atk2:
+    ==: org.bukkit.Location
+    world: world
+    x: -168.41054656979514
+    y: 310.0625
+    z: 6.513769978855627
+    pitch: -2.0999794
+    yaw: -89.40405
+  def1:
+    ==: org.bukkit.Location
+    world: world
+    x: -168.41054656979514
+    y: 310.0625
+    z: 6.513769978855627
+    pitch: -2.0999794
+    yaw: -89.40405
+  def2:
+    ==: org.bukkit.Location
+    world: world
+    x: -168.41054656979514
+    y: 310.0625
+    z: 6.513769978855627
+    pitch: -2.0999794
+    yaw: -89.40405
+

@@ -1,23 +1,29 @@
 package org.soren.bunkies;
 
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolver;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.soren.bunkies.managers.*;
 
 import java.util.List;
+import java.util.Set;
 
 public class ModCommands {
 
@@ -180,6 +186,7 @@ public class ModCommands {
                                                 .then(Commands.argument("kit name", StringArgumentType.word())
                                                         .suggests((ctx, builder) -> {
                                                             List<String> kits = plugin.getConfig().getStringList("kits.kitsList");
+
                                                             for (String kit : kits) {
                                                                 builder.suggest(kit);
                                                             }
@@ -189,10 +196,54 @@ public class ModCommands {
                                                                 if (!(ctx.getSource().getSender() instanceof Player)) {
                                                                 return 0;
                                                                 }
-                                                                Player player = (Player) ctx.getSource().getSender();
-                                                                String name = ctx.getArgument("kit name", String.class);
-                                                                Component message = KitsManager.loadKit(player, name, plugin);
-                                                                ctx.getSource().getSender().sendMessage(message);
+                                                            Location player = ctx.getSource().getLocation();
+                                                            Location atk1 = config.getLocation("zones.atk1");
+                                                            Location atk2 = config.getLocation("zones.atk2");
+                                                            Location def1 = config.getLocation("zones.def1");
+                                                            Location def2 = config.getLocation("zones.def2");
+                                                            Player player1 = ((Player) ctx.getSource().getSender()).getPlayer();
+                                                            if (playerManager.getAtk().contains(player1)) {
+                                                                if((player.getBlockX() <= atk1.blockX() && player.getBlockX() >= atk2.blockX()) || (player.getBlockX() >= atk1.blockX() && player.getBlockX() <= atk2.blockX())) {
+                                                                    if((player.getBlockY() <= atk1.blockY() && player.getBlockY() >= atk2.blockY()) || (player.getBlockY() >= atk1.blockY() && player.getBlockY() <= atk2.blockY())) {
+                                                                        if((player.getBlockX() <= atk1.blockX() && player.getBlockX() >= atk2.blockX()) || (player.getBlockX() >= atk1.blockX() && player.getBlockX() <= atk2.blockX())) {
+                                                                            String name = ctx.getArgument("kit name", String.class);
+                                                                            Component message = KitsManager.loadKit(player1, name, plugin);
+                                                                            try {
+                                                                                modListener.checkArmour(player1);
+                                                                            } catch (Exception e) {
+                                                                                throw new RuntimeException(e);
+
+                                                                            }
+                                                                            ctx.getSource().getSender().sendMessage(message);
+                                                                        }
+
+                                                                    }
+
+                                                                }
+                                                                else {
+                                                                    player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                                }
+                                                            }
+                                                            if (playerManager.getDef().contains(player1)) {
+                                                                if((player.getBlockX() <= def1.blockX() && player.getBlockX() >= def2.blockX()) || (player.getBlockX() >= def1.blockX() && player.getBlockX() <= def2.blockX())) {
+                                                                    if((player.getBlockY() <= def1.blockY() && player.getBlockY() >= def2.blockY()) || (player.getBlockY() >= def1.blockY() && player.getBlockY() <= def2.blockY())) {
+                                                                        if((player.getBlockX() <= def1.blockX() && player.getBlockX() >= def2.blockX()) || (player.getBlockX() >= def1.blockX() && player.getBlockX() <= def2.blockX())) {
+                                                                            String name = ctx.getArgument("kit name", String.class);
+                                                                            Component message = KitsManager.loadKit(player1, name, plugin);
+                                                                            ctx.getSource().getSender().sendMessage(message);
+
+                                                                        }
+
+                                                                    }
+
+                                                                }
+                                                                else {
+                                                                    player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                                }
+                                                            }
+
+
+
                                                                 return 1;
                                                         })))
                                         .then(Commands.literal("list")
@@ -247,7 +298,56 @@ public class ModCommands {
                                                                 Component message = KitsManager.deleteKit(player, name, op, plugin);
                                                                 ctx.getSource().getSender().sendMessage(message);
                                                                 return 1;
-                                                                }))))
+                                                                })))
+                                        .then(Commands.literal("setZone")
+                                                .requires(src->src.getSender().isOp())
+                                                .then(Commands.literal("atk1")
+                                                        .executes(ctx->{
+
+                                                            Player player = (Player) ctx.getSource().getSender();
+                                                            Location atk1  = player.getLocation();
+                                                            config.set("zones.atk1", atk1);
+                                                            plugin.saveConfig();
+                                                            player.sendMessage(Component.text("Point saved successfully"));
+                                                            return 1;
+                                                        }))
+                                                .then(Commands.literal("atk2")
+                                                        .executes(ctx->{
+
+                                                            Player player = (Player) ctx.getSource().getSender();
+                                                            Location atk2  = player.getLocation();
+                                                            config.set("zones.atk2", atk2);
+                                                            plugin.saveConfig();
+                                                            player.sendMessage(Component.text("Point saved successfully"));
+
+
+                                                            return 1;
+                                                        }))
+
+                                                .then(Commands.literal("def1")
+                                                        .executes(ctx->{
+
+                                                            Player player = (Player) ctx.getSource().getSender();
+                                                            Location def1  = player.getLocation();
+                                                            config.set("zones.def1", def1);
+                                                            plugin.saveConfig();
+                                                            player.sendMessage(Component.text("Point saved successfully"));
+                                                            return 1;
+                                                        }))
+                                                .then(Commands.literal("def2")
+                                                        .executes(ctx->{
+
+                                                            Player player = (Player) ctx.getSource().getSender();
+                                                            Location def2  = player.getLocation();
+                                                            config.set("zones.def2", def2);
+                                                            plugin.saveConfig();
+                                                            player.sendMessage(Component.text("Point saved successfully"));
+
+
+                                                            return 1;
+                                                        })))
+                                        )
+
                         .build()
 
          );
