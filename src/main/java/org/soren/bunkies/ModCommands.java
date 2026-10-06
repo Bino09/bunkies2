@@ -40,7 +40,27 @@ public class ModCommands {
                         .then(Commands.literal("StartGame")
                                 .requires(src-> src.getSender().isOp())
                                 .executes(ctx-> {
-                                    GameManager.startGame();
+                                    if(GameManager.getGameStatus == 0) {
+                                        GameManager.startGame();
+                                    }
+                                    else {
+                                        Player player = (Player)ctx.getSource.getSender();
+                                        player.sendMessage(Component.text("Game Already Started!"))
+                                    }
+                                    
+                                    return 1;
+                                }))
+                        .then(Commands.literal("EndGame")
+                                .requires(src-> src.getSender().isOp())
+                                .executes(ctx-> {
+                                    if(GameManager.getGameStatus == 1) {
+                                        GameManager.endGame();
+                                    }
+                                    else {
+                                        Player player = (Player)ctx.getSource.getSender();
+                                        player.sendMessage(Component.text("Game Hasn't Started!"))
+                                    }
+                                    
                                     return 1;
                                 }))
                         .then(Commands.literal("lives")
