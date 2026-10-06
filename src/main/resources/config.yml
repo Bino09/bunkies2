@@ -406,6 +406,23 @@ warps:
     z: 5.492714195029483
     pitch: 3.5999775
     yaw: 89.68945
+  atk1:
+    ==: org.bukkit.Location
+    world: world
+    x: 5
+    y: 115
+    z: 5.492714195029483
+    pitch: 3.5999775
+    yaw: 89.68945
+  def1:
+    ==: org.bukkit.Location
+    world: world
+    x: 5
+    y: 115
+    z: 5.492714195029483
+    pitch: 3.5999775
+    yaw: 89.68945
+
 team-warps:
   atk: atk
   def: def

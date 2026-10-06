@@ -13,9 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.soren.bunkies.managers.LivesManager;
-import org.soren.bunkies.managers.TeamManager;
-import org.soren.bunkies.managers.playerManager;
+import org.soren.bunkies.managers.*;
 
 public class ModCommands {
 
@@ -35,9 +33,16 @@ public class ModCommands {
                                         })))
                         .then(Commands.literal("stats")
                                 .executes(ctx -> {
+                                    Player player = (Player) ctx.getSource().getSender();
                                     StatManager.getStats(player);
                                 return 1;
                               }))
+                        .then(Commands.literal("StartGame")
+                                .requires(src-> src.getSender().isOp())
+                                .executes(ctx-> {
+                                    GameManager.startGame();
+                                    return 1;
+                                }))
                         .then(Commands.literal("lives")
                                 .executes(ctx -> {
                                     ctx.getSource().getSender().sendMessage(Component.text("You have: " + LivesManager.getLives(ctx.getSource().getSender().getServer().getPlayerUniqueId(ctx.getSource().getSender().getName())) + " Lives", TextColor.fromHexString("#f0bf3a")));
@@ -64,6 +69,7 @@ public class ModCommands {
                                             Player player = (Player) ctx.getSource().getSender();
                                             config.set("warps.def", player.getLocation());
                                             plugin.saveConfig();
+                                            player.sendMessage(Component.text("Warp saved successfully"));
                                             return 1;
                                         }))
                                 .then(Commands.literal("atk")
@@ -72,6 +78,25 @@ public class ModCommands {
                                             Player player = (Player) ctx.getSource().getSender();
                                             config.set("warps.atk", player.getLocation());
                                             plugin.saveConfig();
+                                            player.sendMessage(Component.text("Warp saved successfully"));
+                                            return 1;
+                                        }))
+                                .then(Commands.literal("Idef")
+                                        .requires(src -> src.getSender().isOp())
+                                        .executes(ctx -> {
+                                            Player player = (Player) ctx.getSource().getSender();
+                                            config.set("warps.def1", player.getLocation());
+                                            plugin.saveConfig();
+                                            player.sendMessage(Component.text("Warp saved successfully"));
+                                            return 1;
+                                        }))
+                                .then(Commands.literal("Iatk")
+                                        .requires(src -> src.getSender().isOp())
+                                        .executes(ctx -> {
+                                            Player player = (Player) ctx.getSource().getSender();
+                                            config.set("warps.atk1", player.getLocation());
+                                            plugin.saveConfig();
+                                            player.sendMessage(Component.text("Warp saved successfully"));
                                             return 1;
                                         })))
 

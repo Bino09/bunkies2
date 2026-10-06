@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 import org.soren.bunkies.managers.LivesManager;
+import org.soren.bunkies.managers.StatManager;
 import org.soren.bunkies.managers.TeamManager;
 import org.soren.bunkies.managers.playerManager;
 
@@ -53,7 +54,7 @@ public class modListener implements Listener {
         String chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
         String helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
 
-        if (!boots.equals(!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]"))) {
+        if (!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
 
             if (defEntries.contains(player.getName())) {
 
@@ -134,9 +135,9 @@ public class modListener implements Listener {
             if (playerManager.getDef().contains(killer)) {
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#5555FF")));
                 StatManager.updateDeaths(player);
-                StatManager.updateKills(killer);
+                StatManager.updateKills((Player) killer);
                 LivesManager.validDeath(player.getUniqueId());
-                player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
+
             }
         }
         if (playerManager.getDef().contains(player)) {
@@ -146,8 +147,8 @@ public class modListener implements Listener {
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#FF5555")));
                 LivesManager.validDeath(player.getUniqueId());
                 StatManager.updateDeaths(player);
-                StatManager.updateKills(killer);
-                player.sendMessage(Component.text(LivesManager.getLives(player.getUniqueId())));
+                StatManager.updateKills((Player) killer);
+
             }
         }
         if (LivesManager.getLives(player.getUniqueId()) <= 0) {
