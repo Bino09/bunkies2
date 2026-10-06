@@ -14,11 +14,11 @@ public class StatManager {
   static HashMap<Player, Integer> deathTracker = new HashMap<>();
   static HashMap<Player, Integer> killTracker = new HashMap<>();
   public static void startGame(List<Player> playerList) {
-    
+
     for(int i = 0; i < playerList.size(); i++) {
       deathTracker.put(playerList.get(i), 0);
       killTracker.put(playerList.get(i), 0);
-      
+
     }
   
   }
