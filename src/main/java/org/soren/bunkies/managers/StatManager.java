@@ -23,7 +23,7 @@ public class StatManager {
   
   }
   public static void getStats(Player player) {
-    int deaths = (2 - deathTracker.get(player));
+    int deaths = deathTracker.get(player);
     int kills = killTracker.get(player);
     float kd = ((float) kills / deaths);
     player.sendMessage(Component.text("You have died: " + deaths + " times", TextColor.fromHexString("#1DF251")));

@@ -1,5 +1,6 @@
 package org.soren.bunkies.managers;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -17,10 +18,26 @@ public class GameManager {
         for(int i = 0; i < playerManager.getAtk().size(); i++) {
             Player player = playerManager.getAtk().get(i);
             player.teleport(atk);
+            player.setGameMode(GameMode.SURVIVAL);
         }
         for(int i = 0; i < playerManager.getDef().size(); i++) {
             Player player = playerManager.getDef().get(i);
             player.teleport(def);
+            player.setGameMode(GameMode.SURVIVAL);
+        }
+    }
+    public static void endGame() {
+        Location atk1 = config.getLocation("warps.atk1");
+        Location def1 = config.getLocation("warps.def1");
+        for(int i = 0; i < playerManager.getAtk().size(); i++) {
+            Player player = playerManager.getAtk().get(i);
+            player.teleport(atk1);
+            player.setGameMode(GameMode.ADVENTURE);
+        }
+        for(int i = 0; i < playerManager.getDef().size(); i++) {
+            Player player = playerManager.getDef().get(i);
+            player.teleport(def1);
+            player.setGameMode(GameMode.ADVENTURE);
         }
     }
 
