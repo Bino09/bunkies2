@@ -3,10 +3,12 @@ package org.soren.bunkies;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,12 +17,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.soren.bunkies.managers.*;
 
+import java.util.List;
+
 public class ModCommands {
 
 
     public static void register(Commands commands, Bunkies2 plugin) {
                 FileConfiguration config = JavaPlugin.getPlugin(Bunkies2.class).getConfig();
-                Bunkies2 plugin = JavaPlugin.getPlugin(Bunkies2.class);
+
                 commands.register(
                 Commands.literal("soren")
                         .then(Commands.literal("genTeams")
