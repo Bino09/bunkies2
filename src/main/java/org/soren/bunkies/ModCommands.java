@@ -40,12 +40,12 @@ public class ModCommands {
                         .then(Commands.literal("StartGame")
                                 .requires(src-> src.getSender().isOp())
                                 .executes(ctx-> {
-                                    if(GameManager.getGameStatus == 0) {
+                                    if(GameManager.getGameStatus() == 0) {
                                         GameManager.startGame();
                                     }
                                     else {
-                                        Player player = (Player)ctx.getSource.getSender();
-                                        player.sendMessage(Component.text("Game Already Started!"))
+                                        Player player = (Player)ctx.getSource().getSender();
+                                        player.sendMessage(Component.text("Game Already Started!"));
                                     }
                                     
                                     return 1;
@@ -53,12 +53,12 @@ public class ModCommands {
                         .then(Commands.literal("EndGame")
                                 .requires(src-> src.getSender().isOp())
                                 .executes(ctx-> {
-                                    if(GameManager.getGameStatus == 1) {
+                                    if(GameManager.getGameStatus() == 1) {
                                         GameManager.endGame();
                                     }
                                     else {
-                                        Player player = (Player)ctx.getSource.getSender();
-                                        player.sendMessage(Component.text("Game Hasn't Started!"))
+                                        Player player = (Player)ctx.getSource().getSender();
+                                        player.sendMessage(Component.text("Game Hasn't Started!"));
                                     }
                                     
                                     return 1;
