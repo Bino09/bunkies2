@@ -34,93 +34,7 @@ public class modListener implements Listener {
 
     @EventHandler
     public void onEquipArmour(PlayerArmorChangeEvent event) throws Exception {
-        ItemStack newBoots = new ItemStack(Material.DIAMOND_BOOTS);
-        ItemStack newPants = new ItemStack(Material.DIAMOND_LEGGINGS);
-        ItemStack newChest = new ItemStack(Material.DIAMOND_CHESTPLATE);
-        ItemStack newHelmet = new ItemStack(Material.DIAMOND_HELMET);
-
-
-        Player player = event.getPlayer();
-        Team atk = TeamManager.board.getTeam("atk");
-        Team def = TeamManager.board.getTeam("def");
-        assert atk != null;
-        Set<String> atkEntries = atk.getEntries();
-        assert def != null;
-        Set<String> defEntries = def.getEntries();
-
-        String boots = player.getEquipment().getBoots().getItemMeta().getAsComponentString();
-        String pants = player.getEquipment().getLeggings().getItemMeta().getAsComponentString();
-        String chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
-        String helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
-
-        if (!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
-
-            if (defEntries.contains(player.getName())) {
-
-                ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                newBoots.setItemMeta(meta);
-                player.getEquipment().setBoots(newBoots);
-            }
-            if (atkEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
-                newBoots.setItemMeta(meta);
-                player.getEquipment().setBoots(newBoots);
-
-            }
-        }
-        if (!pants.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !pants.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
-
-            if (defEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                newPants.setItemMeta(meta);
-
-                player.getEquipment().setLeggings(newPants);
-
-            }
-            if (atkEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
-                newPants.setItemMeta(meta);
-
-                player.getEquipment().setLeggings(newPants);
-
-            }
-        }
-        if (!chestplate.equals(!helmet.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !chestplate.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]"))) {
-
-            if (defEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                newChest.setItemMeta(meta);
-                player.getEquipment().setChestplate(newChest);
-            }
-            if (atkEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
-                newChest.setItemMeta(meta);
-                player.getEquipment().setChestplate(newChest);
-
-            }
-        }
-        if (!helmet.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !helmet.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
-            if (defEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                newHelmet.setItemMeta(meta);
-                player.getEquipment().setHelmet(newHelmet);
-            }
-            if (atkEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
-                newHelmet.setItemMeta(meta);
-                player.getEquipment().setHelmet(newHelmet);
-
-            }
-
-        }
+        checkArmour(event.getPlayer());
     }
     @EventHandler
     public void playerDamage(EntityDamageByEntityEvent event) {
@@ -179,7 +93,7 @@ public class modListener implements Listener {
         }
 
     }
-    public static void checkArmour(Player player) throws Exception {
+    public static void checkArmour(Player player) {
         ItemStack newBoots = new ItemStack(Material.DIAMOND_BOOTS);
         ItemStack newPants = new ItemStack(Material.DIAMOND_LEGGINGS);
         ItemStack newChest = new ItemStack(Material.DIAMOND_CHESTPLATE);
@@ -193,81 +107,102 @@ public class modListener implements Listener {
         Set<String> atkEntries = atk.getEntries();
         assert def != null;
         Set<String> defEntries = def.getEntries();
+        String boots = null, pants = null, chestplate = null, helmet = null;
+        try {
+            boots = player.getEquipment().getBoots().getItemMeta().getAsComponentString();
+        } catch (Exception ignored) {}
+        try {
+            pants = player.getEquipment().getLeggings().getItemMeta().getAsComponentString();
+        } catch (Exception ignored) {}
+        try {
+            chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
+        } catch (Exception ignored) {}
+        try {
+            helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
+        } catch (Exception ignored) {}
 
-        String boots = player.getEquipment().getBoots().getItemMeta().getAsComponentString();
-        String pants = player.getEquipment().getLeggings().getItemMeta().getAsComponentString();
-        String chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
-        String helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
 
-        if (!boots.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
 
-            if (defEntries.contains(player.getName())) {
 
-                ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                newBoots.setItemMeta(meta);
-                player.getEquipment().setBoots(newBoots);
+        if(!boots.equals(null)){
+            if (!boots.equals("[minecraft:trim={material: \"minecraft:diamond\", pattern: \"minecraft:rib\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:rib\"}]")) {
+
+                if (defEntries.contains(player.getName())) {
+
+                    ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
+                    meta.setTrim(new ArmorTrim(TrimMaterial.DIAMOND, TrimPattern.RIB));
+                    newBoots.setItemMeta(meta);
+                    player.getEquipment().setBoots(newBoots);
+                }
+                if (atkEntries.contains(player.getName())) {
+                    ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
+                    meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.RIB));
+                    newBoots.setItemMeta(meta);
+                    player.getEquipment().setBoots(newBoots);
+
+                }
             }
-            if (atkEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
-                newBoots.setItemMeta(meta);
-                player.getEquipment().setBoots(newBoots);
+        }
+        if(!pants.equals(null)) {
+            if (!pants.equals("[minecraft:trim={material: \"minecraft:diamond\", pattern: \"minecraft:rib\"}]") || !pants.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:rib\"}]")) {
+
+                if (defEntries.contains(player.getName())) {
+                    ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
+                    meta.setTrim(new ArmorTrim(TrimMaterial.DIAMOND, TrimPattern.RIB));
+                    newPants.setItemMeta(meta);
+
+                    player.getEquipment().setLeggings(newPants);
+
+                }
+                if (atkEntries.contains(player.getName())) {
+                    ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
+                    meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.RIB));
+                    newPants.setItemMeta(meta);
+
+                    player.getEquipment().setLeggings(newPants);
+
+                }
+            }
+        }
+        if(!chestplate.equals(null)) {
+            if (!chestplate.equals(!helmet.equals("[minecraft:trim={material: \"minecraft:diamond\", pattern: \"minecraft:rib\"}]") || !chestplate.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:rib\"}]"))) {
+
+                if (defEntries.contains(player.getName())) {
+                    ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
+                    meta.setTrim(new ArmorTrim(TrimMaterial.DIAMOND, TrimPattern.RIB));
+                    newChest.setItemMeta(meta);
+                    player.getEquipment().setChestplate(newChest);
+                }
+                if (atkEntries.contains(player.getName())) {
+                    ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
+                    meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.RIB));
+                    newChest.setItemMeta(meta);
+                    player.getEquipment().setChestplate(newChest);
+
+                }
+            }
+        }
+        if(!helmet.equals(null)) {
+            if (!helmet.equals("[minecraft:trim={material: \"minecraft:diamond\", pattern: \"minecraft:rib\"}]") || !helmet.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:rib\"}]")) {
+                if (defEntries.contains(player.getName())) {
+                    ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
+                    meta.setTrim(new ArmorTrim(TrimMaterial.DIAMOND, TrimPattern.RIB));
+                    newHelmet.setItemMeta(meta);
+                    player.getEquipment().setHelmet(newHelmet);
+                }
+                if (atkEntries.contains(player.getName())) {
+                    ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
+                    meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.RIB));
+                    newHelmet.setItemMeta(meta);
+                    player.getEquipment().setHelmet(newHelmet);
+
+                }
 
             }
         }
-        if (!pants.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !pants.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
-
-            if (defEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                newPants.setItemMeta(meta);
-
-                player.getEquipment().setLeggings(newPants);
-
-            }
-            if (atkEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
-                newPants.setItemMeta(meta);
-
-                player.getEquipment().setLeggings(newPants);
-
-            }
         }
-        if (!chestplate.equals(!helmet.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !chestplate.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]"))) {
 
-            if (defEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                newChest.setItemMeta(meta);
-                player.getEquipment().setChestplate(newChest);
-            }
-            if (atkEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
-                newChest.setItemMeta(meta);
-                player.getEquipment().setChestplate(newChest);
 
-            }
-        }
-        if (!helmet.equals("[minecraft:trim={material: \"minecraft:lapis\", pattern: \"minecraft:wayfinder\"}]") || !helmet.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:wayfinder\"}]")) {
-            if (defEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.LAPIS, TrimPattern.WAYFINDER));
-                newHelmet.setItemMeta(meta);
-                player.getEquipment().setHelmet(newHelmet);
-            }
-            if (atkEntries.contains(player.getName())) {
-                ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
-                meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.WAYFINDER));
-                newHelmet.setItemMeta(meta);
-                player.getEquipment().setHelmet(newHelmet);
-
-            }
-
-        }
-    }
 
 
 }
