@@ -16,6 +16,8 @@ import org.soren.bunkies.Bunkies2;
 import org.soren.bunkies.modListener;
 
 
+
+
 public class TeamManager {
     public static Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
     static FileConfiguration config = JavaPlugin.getPlugin(Bunkies2.class).getConfig();
@@ -40,6 +42,8 @@ public class TeamManager {
     }
 
     public static void addDef(Player player) {
+
+
         Location def1 = config.getLocation("warps.def1");
         Location defwarp = config.getLocation("warps.def");
         Team def = board.getTeam("def");
@@ -62,6 +66,7 @@ public class TeamManager {
     }
 
     public static void addAtk(Player player) {
+
         Location atk1 = config.getLocation("warps.atk1");
         Location atkwarp = config.getLocation("warps.atk");
 
@@ -89,14 +94,18 @@ public class TeamManager {
         if (def.hasPlayer(player)) {
             def.removePlayer(player);
 
+
             addAtk(player);
+
             playerManager.swapDef(player);
 
 
         } else if (atk.hasPlayer(player)) {
             atk.removePlayer(player);
 
+
             addDef(player);
+
             playerManager.swapAtk(player);
 
 

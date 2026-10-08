@@ -2,7 +2,7 @@ name: bunkies2
 version: '${version}'
 
 main: org.soren.bunkies.Bunkies2
-api-version: '1.21.11'
+api-version: '1.21'
 
 load: POSTWORLD
 

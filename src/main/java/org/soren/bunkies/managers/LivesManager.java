@@ -1,6 +1,7 @@
 package org.soren.bunkies.managers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -32,11 +33,12 @@ public class LivesManager {
 
         return numberLives;
     }
-    public static void setLives(UUID uuid, int amount) {
+    public static void setLives(UUID uuid, int amount, Player player) {
         int life = lives.get(uuid);
         life = amount;
         lives.remove(uuid);
         lives.put(uuid,life);
+        player.setGameMode(GameMode.SURVIVAL);
 
     }
 }

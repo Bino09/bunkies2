@@ -87,14 +87,14 @@ public class ModCommands {
                                                     int x = ctx.getArgument("x", int.class);
                                                     PlayerSelectorArgumentResolver resolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
                                                     Player player = resolver.resolve(ctx.getSource()).getFirst();
-                                                    LivesManager.setLives(player.getUniqueId(), x);
+                                                    LivesManager.setLives(player.getUniqueId(), x, player);
                                                     player.sendMessage(Component.text("Your lives have been set to: " + LivesManager.getLives(player.getUniqueId()), TextColor.fromHexString("#f0bf3a")));
                                                     return 1;
 
                                                 }))))
                         .then(Commands.literal("setWarp")
+                                .requires(src -> src.getSender().isOp())
                                 .then(Commands.literal("def")
-                                        .requires(src -> src.getSender().isOp())
                                         .executes(ctx -> {
                                             Player player = (Player) ctx.getSource().getSender();
                                             config.set("warps.def", player.getLocation());
@@ -103,7 +103,7 @@ public class ModCommands {
                                             return 1;
                                         }))
                                 .then(Commands.literal("atk")
-                                        .requires(src -> src.getSender().isOp())
+
                                         .executes(ctx -> {
                                             Player player = (Player) ctx.getSource().getSender();
                                             config.set("warps.atk", player.getLocation());
@@ -210,13 +210,19 @@ public class ModCommands {
                                                                             Component message = KitsManager.loadKit(player1, name, plugin);
                                                                             try {
                                                                                 modListener.checkArmour(player1);
-                                                                            } catch (Exception e) {
-                                                                                throw new RuntimeException(e);
+                                                                            } catch (Exception ignored) {
+
 
                                                                             }
                                                                             ctx.getSource().getSender().sendMessage(message);
                                                                         }
+                                                                        else {
+                                                                            player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                                        }
 
+                                                                    }
+                                                                    else {
+                                                                        player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
                                                                     }
 
                                                                 }
@@ -230,10 +236,21 @@ public class ModCommands {
                                                                         if((player.getBlockX() <= def1.blockX() && player.getBlockX() >= def2.blockX()) || (player.getBlockX() >= def1.blockX() && player.getBlockX() <= def2.blockX())) {
                                                                             String name = ctx.getArgument("kit name", String.class);
                                                                             Component message = KitsManager.loadKit(player1, name, plugin);
+                                                                            try {
+                                                                                modListener.checkArmour(player1);
+                                                                            } catch (Exception ignored) {
+
+                                                                            }
                                                                             ctx.getSource().getSender().sendMessage(message);
 
                                                                         }
+                                                                        else {
+                                                                            player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                                        }
 
+                                                                    }
+                                                                    else {
+                                                                        player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
                                                                     }
 
                                                                 }
