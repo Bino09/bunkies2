@@ -52,6 +52,7 @@ public class ModCommands {
                                 .executes(ctx-> {
                                     if(GameManager.getGameStatus() == 0) {
                                         GameManager.startGame();
+                                        
                                     }
                                     else {
                                         Player player = (Player)ctx.getSource().getSender();
@@ -87,7 +88,7 @@ public class ModCommands {
                                                     int x = ctx.getArgument("x", int.class);
                                                     PlayerSelectorArgumentResolver resolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
                                                     Player player = resolver.resolve(ctx.getSource()).getFirst();
-                                                    LivesManager.setLives(player.getUniqueId(), x);
+                                                    LivesManager.setLives(player.getUniqueId(), x, player);
                                                     player.sendMessage(Component.text("Your lives have been set to: " + LivesManager.getLives(player.getUniqueId()), TextColor.fromHexString("#f0bf3a")));
                                                     return 1;
 

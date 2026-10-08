@@ -32,11 +32,13 @@ public class LivesManager {
 
         return numberLives;
     }
-    public static void setLives(UUID uuid, int amount) {
+    public static void setLives(UUID uuid, int amount, Player player) {
         int life = lives.get(uuid);
         life = amount;
         lives.remove(uuid);
         lives.put(uuid,life);
+        player.setGameMode(GameMode.SURVIVAL)
+        
 
     }
 }
