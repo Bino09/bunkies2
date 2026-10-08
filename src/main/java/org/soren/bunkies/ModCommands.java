@@ -216,8 +216,12 @@ public class ModCommands {
                                                                             }
                                                                             ctx.getSource().getSender().sendMessage(message);
                                                                         }
+                                                                        else {
+                                                                            player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
 
                                                                     }
+                                                                    else {
+                                                                        player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
 
                                                                 }
                                                                 else {
@@ -233,6 +237,12 @@ public class ModCommands {
                                                                             ctx.getSource().getSender().sendMessage(message);
 
                                                                         }
+                                                                        else {
+                                                                            player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+
+                                                                    }
+                                                                    else {
+                                                                            player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
 
                                                                     }
 
@@ -241,6 +251,10 @@ public class ModCommands {
                                                                     player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
                                                                 }
                                                             }
+                                                            else {
+                                                                            player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+
+                                                                    }
 
 
 
