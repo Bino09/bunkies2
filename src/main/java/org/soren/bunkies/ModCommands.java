@@ -89,7 +89,11 @@ public class ModCommands {
                                                     Player player = resolver.resolve(ctx.getSource()).getFirst();
                                                     LivesManager.setLives(player.getUniqueId(), x, player);
                                                     player.sendMessage(Component.text("Your lives have been set to: " + LivesManager.getLives(player.getUniqueId()), TextColor.fromHexString("#f0bf3a")));
+                                                    Player sender =(Player)ctx.getSource().getSender();
+                                                    sender.sendMessage(Component.text("success!"));
                                                     return 1;
+
+
 
                                                 }))))
                         .then(Commands.literal("setWarp")

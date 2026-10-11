@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.soren.bunkies.Bunkies2;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GameManager {
 
@@ -17,7 +18,7 @@ public class GameManager {
 
     public static void startGame() {
         gameStatus = 1;
-        Bukkit.getWorld("world").setDifficulty(Difficulty.HARD);
+        Objects.requireNonNull(Bukkit.getWorld("world")).setDifficulty(Difficulty.HARD);
         Location atk = config.getLocation("warps.atk");
         Location def = config.getLocation("warps.def");
         for(int i = 0; i < playerManager.getAtk().size(); i++) {

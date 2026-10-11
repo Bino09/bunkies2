@@ -77,12 +77,14 @@ public class TeamManager {
         player.setGameMode(GameMode.SURVIVAL);
         if (GameManager.getGameStatus() == 1) {
             player.teleport(atkwarp);
+            player.setGameMode(GameMode.SURVIVAL);
 
         } else {
             player.teleport(atk1);
 
         }
         atk.addPlayer(player);
+
 
 
     }
