@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -25,6 +27,9 @@ import org.bukkit.scoreboard.Team;
 import org.soren.bunkies.managers.*;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -94,115 +99,49 @@ public class modListener implements Listener {
 
     }
     public static void checkArmour(Player player) {
-        ItemStack newBoots = new ItemStack(Material.DIAMOND_BOOTS);
-        ItemStack newPants = new ItemStack(Material.DIAMOND_LEGGINGS);
-        ItemStack newChest = new ItemStack(Material.DIAMOND_CHESTPLATE);
-        ItemStack newHelmet = new ItemStack(Material.DIAMOND_HELMET);
-
-
-
         Team atk = TeamManager.board.getTeam("atk");
         Team def = TeamManager.board.getTeam("def");
-        assert atk != null;
-        Set<String> atkEntries = atk.getEntries();
-        assert def != null;
-        Set<String> defEntries = def.getEntries();
-        String boots = null, pants = null, chestplate = null, helmet = null;
-        try {
-            boots = player.getEquipment().getBoots().getItemMeta().getAsComponentString();
-        } catch (Exception ignored) {}
-        try {
-            pants = player.getEquipment().getLeggings().getItemMeta().getAsComponentString();
-        } catch (Exception ignored) {}
-        try {
-            chestplate = player.getEquipment().getChestplate().getItemMeta().getAsComponentString();
-        } catch (Exception ignored) {}
-        try {
-            helmet = player.getEquipment().getHelmet().getItemMeta().getAsComponentString();
-        } catch (Exception ignored) {}
+        String name = player.getName();
 
+        TrimMaterial trimMat;
+        if (def != null && def.hasEntry(name)) trimMat = TrimMaterial.DIAMOND;
+        else if (atk != null && atk.hasEntry(name)) trimMat = TrimMaterial.REDSTONE;
+        else return;
 
+        PlayerInventory inv = player.getInventory();
 
+        ItemStack boots = inv.getBoots();
+        if (boots != null && !hasTrim(boots, trimMat))
+            inv.setBoots(build(Material.DIAMOND_BOOTS, trimMat, true));
 
-        if(!boots.equals(null)){
-            if (!boots.equals("[minecraft:trim={material: \"minecraft:diamond\", pattern: \"minecraft:rib\"}]") || !boots.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:rib\"}]")) {
+        ItemStack legs = inv.getLeggings();
+        if (legs != null && !hasTrim(legs, trimMat))
+            inv.setLeggings(build(Material.DIAMOND_LEGGINGS, trimMat, false));
 
-                if (defEntries.contains(player.getName())) {
+        ItemStack chest = inv.getChestplate();
+        if (chest != null && !hasTrim(chest, trimMat))
+            inv.setChestplate(build(Material.DIAMOND_CHESTPLATE, trimMat, false));
 
-                    ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
-                    meta.setTrim(new ArmorTrim(TrimMaterial.DIAMOND, TrimPattern.RIB));
-                    newBoots.setItemMeta(meta);
-                    player.getEquipment().setBoots(newBoots);
-                }
-                if (atkEntries.contains(player.getName())) {
-                    ArmorMeta meta = (ArmorMeta) newBoots.getItemMeta();
-                    meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.RIB));
-                    newBoots.setItemMeta(meta);
-                    player.getEquipment().setBoots(newBoots);
+        ItemStack helmet = inv.getHelmet();
+        if (helmet != null && !hasTrim(helmet, trimMat))
+            inv.setHelmet(build(Material.DIAMOND_HELMET, trimMat, false));
+    }
+    private static boolean hasTrim(ItemStack item, TrimMaterial expected) {
+        if (item == null || !(item.getItemMeta() instanceof ArmorMeta meta)) return false;
+        ArmorTrim trim = meta.getTrim();
+        return trim != null && trim.getMaterial() == expected && trim.getPattern() == TrimPattern.RIB;
+    }
 
-                }
-            }
-        }
-        if(!pants.equals(null)) {
-            if (!pants.equals("[minecraft:trim={material: \"minecraft:diamond\", pattern: \"minecraft:rib\"}]") || !pants.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:rib\"}]")) {
-
-                if (defEntries.contains(player.getName())) {
-                    ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
-                    meta.setTrim(new ArmorTrim(TrimMaterial.DIAMOND, TrimPattern.RIB));
-                    newPants.setItemMeta(meta);
-
-                    player.getEquipment().setLeggings(newPants);
-
-                }
-                if (atkEntries.contains(player.getName())) {
-                    ArmorMeta meta = (ArmorMeta) newPants.getItemMeta();
-                    meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.RIB));
-                    newPants.setItemMeta(meta);
-
-                    player.getEquipment().setLeggings(newPants);
-
-                }
-            }
-        }
-        if(!chestplate.equals(null)) {
-            if (!chestplate.equals(!helmet.equals("[minecraft:trim={material: \"minecraft:diamond\", pattern: \"minecraft:rib\"}]") || !chestplate.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:rib\"}]"))) {
-
-                if (defEntries.contains(player.getName())) {
-                    ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
-                    meta.setTrim(new ArmorTrim(TrimMaterial.DIAMOND, TrimPattern.RIB));
-                    newChest.setItemMeta(meta);
-                    player.getEquipment().setChestplate(newChest);
-                }
-                if (atkEntries.contains(player.getName())) {
-                    ArmorMeta meta = (ArmorMeta) newChest.getItemMeta();
-                    meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.RIB));
-                    newChest.setItemMeta(meta);
-                    player.getEquipment().setChestplate(newChest);
-
-                }
-            }
-        }
-        if(!helmet.equals(null)) {
-            if (!helmet.equals("[minecraft:trim={material: \"minecraft:diamond\", pattern: \"minecraft:rib\"}]") || !helmet.equals("[minecraft:trim={material: \"minecraft:redstone\", pattern: \"minecraft:rib\"}]")) {
-                if (defEntries.contains(player.getName())) {
-                    ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
-                    meta.setTrim(new ArmorTrim(TrimMaterial.DIAMOND, TrimPattern.RIB));
-                    newHelmet.setItemMeta(meta);
-                    player.getEquipment().setHelmet(newHelmet);
-                }
-                if (atkEntries.contains(player.getName())) {
-                    ArmorMeta meta = (ArmorMeta) newHelmet.getItemMeta();
-                    meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.RIB));
-                    newHelmet.setItemMeta(meta);
-                    player.getEquipment().setHelmet(newHelmet);
-
-                }
-
-            }
-        }
-        }
-
-
+    private static ItemStack build(Material type, TrimMaterial trimMat, boolean depthStrider) {
+        ItemStack item = new ItemStack(type);
+        ArmorMeta meta = (ArmorMeta) item.getItemMeta();
+        meta.setTrim(new ArmorTrim(trimMat, TrimPattern.RIB));
+        meta.addEnchant(Enchantment.PROTECTION, 4, false);
+        meta.addEnchant(Enchantment.UNBREAKING, 3, false);
+        if (depthStrider) meta.addEnchant(Enchantment.DEPTH_STRIDER, 3, false);
+        item.setItemMeta(meta);
+        return item;
+    }
 
 
 }

@@ -19,6 +19,8 @@ import vg.civcraft.mc.namelayer.group.Group;
 import vg.civcraft.mc.namelayer.permission.*;
 
 
+
+
 public class TeamManager {
     public static Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
     static FileConfiguration config = JavaPlugin.getPlugin(Bunkies2.class).getConfig();
@@ -51,6 +53,8 @@ public class TeamManager {
         catch (Exception ignore){}
 
         defnl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+
+
         Location def1 = config.getLocation("warps.def1");
         Location defwarp = config.getLocation("warps.def");
         Team def = board.getTeam("def");
@@ -80,6 +84,7 @@ public class TeamManager {
         catch (Exception ignore){}
         Group atknl = GroupManager.getGroup("atk");
         atknl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+
         Location atk1 = config.getLocation("warps.atk1");
         Location atkwarp = config.getLocation("warps.atk");
 
@@ -90,12 +95,14 @@ public class TeamManager {
         player.setGameMode(GameMode.SURVIVAL);
         if (GameManager.getGameStatus() == 1) {
             player.teleport(atkwarp);
+            player.setGameMode(GameMode.SURVIVAL);
 
         } else {
             player.teleport(atk1);
 
         }
         atk.addPlayer(player);
+
 
 
     }
@@ -110,8 +117,10 @@ public class TeamManager {
             def.removePlayer(player);
             defnl.removeMember(player.getUniqueId());
 
+
             addAtk(player);
             atknl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+
             playerManager.swapDef(player);
 
 
@@ -119,8 +128,10 @@ public class TeamManager {
             atk.removePlayer(player);
             atknl.removeMember(player.getUniqueId());
 
+
             addDef(player);
-           defnl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+            defnl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+
             playerManager.swapAtk(player);
 
 
