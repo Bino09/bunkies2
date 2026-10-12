@@ -14,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -27,29 +26,21 @@ import org.bukkit.scoreboard.Team;
 import org.soren.bunkies.managers.*;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-
 public class modListener implements Listener {
 
-
-
     @EventHandler
-    public void onEquipArmour(PlayerArmorChangeEvent event) throws Exception {
+    public void onEquipArmour(PlayerArmorChangeEvent event) {
         checkArmour(event.getPlayer());
     }
+
     @EventHandler
     public void playerDamage(EntityDamageByEntityEvent event) {
-        if(GameManager.getGameStatus() == 0){
+        if (GameManager.getGameStatus() == 0) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
@@ -66,7 +57,6 @@ public class modListener implements Listener {
         }
         if (playerManager.getDef().contains(player)) {
 
-
             if (playerManager.getAtk().contains(killer)) {
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#FF5555")));
                 LivesManager.validDeath(player.getUniqueId());
@@ -78,8 +68,6 @@ public class modListener implements Listener {
         if (LivesManager.getLives(player.getUniqueId()) <= 0) {
             player.setGameMode(GameMode.SPECTATOR);
         }
-
-
     }
 
     @EventHandler
@@ -96,8 +84,13 @@ public class modListener implements Listener {
 
             event.setRespawnLocation(location);
         }
-
     }
+
+    /**
+     * Makes sure any armour a player is wearing has their team's trim.
+     * Empty slots are left alone, and armour that already has the right trim
+     * is never replaced, so it keeps its damage.
+     */
     public static void checkArmour(Player player) {
         Team atk = TeamManager.board.getTeam("atk");
         Team def = TeamManager.board.getTeam("def");
@@ -126,10 +119,13 @@ public class modListener implements Listener {
         if (helmet != null && !hasTrim(helmet, trimMat))
             inv.setHelmet(build(Material.DIAMOND_HELMET, trimMat, false));
     }
+
     private static boolean hasTrim(ItemStack item, TrimMaterial expected) {
         if (item == null || !(item.getItemMeta() instanceof ArmorMeta meta)) return false;
         ArmorTrim trim = meta.getTrim();
-        return trim != null && trim.getMaterial() == expected && trim.getPattern() == TrimPattern.RIB;
+        return trim != null
+                && trim.getMaterial() == expected
+                && trim.getPattern() == TrimPattern.RIB;
     }
 
     private static ItemStack build(Material type, TrimMaterial trimMat, boolean depthStrider) {
@@ -142,11 +138,4 @@ public class modListener implements Listener {
         item.setItemMeta(meta);
         return item;
     }
-
-
 }
-
-
-
-
-
