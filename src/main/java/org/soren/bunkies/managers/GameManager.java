@@ -18,7 +18,7 @@ public class GameManager {
 
     public static void startGame() {
         gameStatus = 1;
-        Objects.requireNonNull(Bukkit.getWorld("world")).setDifficulty(Difficulty.HARD);
+        Bukkit.getWorld("world").setDifficulty(Difficulty.HARD);
         Location atk = config.getLocation("warps.atk");
         Location def = config.getLocation("warps.def");
         for(int i = 0; i < playerManager.getAtk().size(); i++) {

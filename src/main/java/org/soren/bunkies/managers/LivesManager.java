@@ -50,6 +50,7 @@ public class LivesManager {
         life = amount;
         lives.remove(uuid);
         lives.put(uuid,life);
+        player.setGameMode(GameMode.SURVIVAL);
 
         player.setGameMode(GameMode.SURVIVAL);
 
