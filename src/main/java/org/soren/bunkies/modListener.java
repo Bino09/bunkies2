@@ -86,11 +86,7 @@ public class modListener implements Listener {
         }
     }
 
-    /**
-     * Makes sure any armour a player is wearing has their team's trim.
-     * Empty slots are left alone, and armour that already has the right trim
-     * is never replaced, so it keeps its damage.
-     */
+
     public static void checkArmour(Player player) {
         Team atk = TeamManager.board.getTeam("atk");
         Team def = TeamManager.board.getTeam("def");

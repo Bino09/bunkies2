@@ -21,6 +21,7 @@ import vg.civcraft.mc.namelayer.permission.*;
 
 
 
+
 public class TeamManager {
     public static Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
     static FileConfiguration config = JavaPlugin.getPlugin(Bunkies2.class).getConfig();
