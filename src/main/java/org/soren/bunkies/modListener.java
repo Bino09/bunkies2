@@ -100,19 +100,19 @@ public class modListener implements Listener {
         PlayerInventory inv = player.getInventory();
 
         ItemStack boots = inv.getBoots();
-        if (boots != null && !hasTrim(boots, trimMat))
+        if (!isEmpty(boots) && !hasTrim(boots, trimMat))
             inv.setBoots(build(Material.DIAMOND_BOOTS, trimMat, true));
 
         ItemStack legs = inv.getLeggings();
-        if (legs != null && !hasTrim(legs, trimMat))
+        if (!isEmpty(legs) && !hasTrim(legs, trimMat))
             inv.setLeggings(build(Material.DIAMOND_LEGGINGS, trimMat, false));
 
         ItemStack chest = inv.getChestplate();
-        if (chest != null && !hasTrim(chest, trimMat))
+        if (!isEmpty(chest) && !hasTrim(chest, trimMat))
             inv.setChestplate(build(Material.DIAMOND_CHESTPLATE, trimMat, false));
 
         ItemStack helmet = inv.getHelmet();
-        if (helmet != null && !hasTrim(helmet, trimMat))
+        if (!isEmpty(helmet) && !hasTrim(helmet, trimMat))
             inv.setHelmet(build(Material.DIAMOND_HELMET, trimMat, false));
     }
 
@@ -133,5 +133,8 @@ public class modListener implements Listener {
         if (depthStrider) meta.addEnchant(Enchantment.DEPTH_STRIDER, 3, false);
         item.setItemMeta(meta);
         return item;
+    }
+    private static boolean isEmpty(ItemStack item) {
+        return item == null || item.getType().isAir();
     }
 }

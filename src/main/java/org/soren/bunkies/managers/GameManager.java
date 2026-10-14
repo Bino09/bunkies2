@@ -36,20 +36,14 @@ public class GameManager {
         gameStatus = 0;
         Location atk1 = config.getLocation("warps.atk1");
         Location def1 = config.getLocation("warps.def1");
-        for(int i = 0; i < playerManager.getAtk().size(); i++) {
-            Player player = playerManager.getAtk().get(i);
-            player.teleport(atk1);
-            player.setGameMode(GameMode.ADVENTURE);
-            //HashMap<String, Float> leaderboard = StatManager.Leaderboard();
-            //leaderboard.forEach((players, kd) -> {
-                //player.sendMessage(Component.text(players + " K/D: "+ kd, TextColor.fromHexString("#1DF251")));
-            //});
+        Server server = Bukkit.getServer();
+
+        HashMap<String, Float> leaderboard = StatManager.Leaderboard();
+        for(int i = 0; i < leaderboard.size(); i++) {
+
+
         }
-        for(int i = 0; i < playerManager.getDef().size(); i++) {
-            Player player = playerManager.getDef().get(i);
-            player.teleport(def1);
-            player.setGameMode(GameMode.ADVENTURE);
-        }
+
     }
 
 
