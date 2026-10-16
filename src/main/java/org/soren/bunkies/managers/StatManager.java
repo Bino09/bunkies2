@@ -57,25 +57,46 @@ public class StatManager {
     HashMap<String, Float> leaderboard = new HashMap<>();
     Player player = playerList.getFirst();
     String entry = "";
+    int length = playerList.size();
     float KD = 0;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4 || i < length; i++) {
       if (deathTracker.get(player) <= 0) {
         updateDeaths(player);
       }
       player = playerList.get(i);
+      System.out.println("works1");
+      if(!(player.toString().equals(playerList.get(i).getName()))) {
+        for (int k = 0; k < (length); k++) {
+          System.out.println("works");
+          System.out.println(leaderboard);
+          System.out.println((playerList.size()));
+          System.out.println(i);
 
-      for (int k = 0; k < (playerList.size() - 1); k++) {
-        if(!(player.toString().equals(playerList.get(k).toString()))) {
+          System.out.println(k);
 
 
           if ((float) (killTracker.get(player) / deathTracker.get(player)) < (float) (killTracker.get(playerList.get(k)) / deathTracker.get(playerList.get(k)))) {
-            entry = playerList.get(k).toString();
+            entry = playerList.get(k).getName();
             KD = (float) (killTracker.get(playerList.get(k)) / deathTracker.get(playerList.get(k)));
             leaderboard.put(entry, KD);
+            if(k < playerList.size()){
+              playerList.remove(playerList.get((k-1)));
+            }
+            else {
+              playerList.remove(k);
+            }
+
           }
           if ((float) (killTracker.get(player) / deathTracker.get(player)) == (float) (killTracker.get(playerList.get(k)) / deathTracker.get(playerList.get(k)))) {
-            entry = player.toString() + playerList.get(k).toString();
+            entry = player.getName() + " " + playerList.get(k).getName();
             leaderboard.put(entry, KD);
+            if(k < playerList.size()){
+              playerList.remove(playerList.get((k-1)));
+            }
+
+          }
+          if(playerList.size() < i) {
+            break;
           }
         }
       }

@@ -39,7 +39,9 @@ public class GameManager {
         Server server = Bukkit.getServer();
 
         HashMap<String, Float> leaderboard = StatManager.Leaderboard();
+        System.out.println(leaderboard);
         for(int i = 0; i < leaderboard.size(); i++) {
+            System.out.println("works3");
 
 
         }
