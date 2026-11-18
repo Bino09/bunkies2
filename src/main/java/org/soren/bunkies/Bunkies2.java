@@ -17,6 +17,12 @@ public class Bunkies2 extends JavaPlugin {
                 event -> ModCommands.register(event.registrar(), this));
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 event -> ModCommands.register(event.registrar(), this));
+        try {
+            TeamManager.registerTeam("atk");
+            TeamManager.registerTeam("def");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         TeamManager.registerTeam("atk");
         TeamManager.registerTeam("def");
         this.getServer().getPluginManager().registerEvents(new modListener(), this);

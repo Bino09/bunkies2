@@ -21,6 +21,9 @@ public class LivesManager {
 
 
     }
+    public static void addPlayer(UUID uuid) {
+        lives.put(uuid, 2);
+    }
     public static void validDeath(UUID uuid) {
 
         int life = lives.get(uuid);

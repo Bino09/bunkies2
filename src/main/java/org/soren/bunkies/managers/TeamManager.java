@@ -39,8 +39,10 @@ public class TeamManager {
 
     public static void unregisterTeams() {
         Team team = board.getTeam("atk");
+        assert team != null;
         team.unregister();
         team = board.getTeam("def");
+        assert team != null;
         team.unregister();
 
     }

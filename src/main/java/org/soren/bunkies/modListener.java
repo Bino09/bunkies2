@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -44,13 +45,14 @@ public class modListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
-        Entity killer = event.getDamageSource().getCausingEntity();
+        Player killer = player.getKiller();
         if (playerManager.getAtk().contains(player)) {
 
             if (playerManager.getDef().contains(killer)) {
+                assert killer != null;
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#5555FF")));
                 StatManager.updateDeaths(player);
-                StatManager.updateKills((Player) killer);
+                StatManager.updateKills(killer);
                 LivesManager.validDeath(player.getUniqueId());
 
             }
@@ -58,15 +60,23 @@ public class modListener implements Listener {
         if (playerManager.getDef().contains(player)) {
 
             if (playerManager.getAtk().contains(killer)) {
+                assert killer != null;
                 killer.sendMessage(Component.text("Successful kill on " + playerName, TextColor.fromHexString("#FF5555")));
                 LivesManager.validDeath(player.getUniqueId());
                 StatManager.updateDeaths(player);
-                StatManager.updateKills((Player) killer);
+                StatManager.updateKills(killer);
 
             }
         }
         if (LivesManager.getLives(player.getUniqueId()) <= 0) {
             player.setGameMode(GameMode.SPECTATOR);
+        }
+    }
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if(GameManager.getGameStatus() == 1 && (playerManager.getAtk().contains(player) || playerManager.getDef().contains(player))) {
+            LivesManager.addPlayer(player.getUniqueId());
         }
     }
 
@@ -77,11 +87,13 @@ public class modListener implements Listener {
         if (playerManager.getAtk().contains(player)) {
             Location location = config.getLocation("warps.atk");
 
+            assert location != null;
             event.setRespawnLocation(location);
         }
         if (playerManager.getDef().contains(player)) {
             Location location = config.getLocation("warps.def");
 
+            assert location != null;
             event.setRespawnLocation(location);
         }
     }
