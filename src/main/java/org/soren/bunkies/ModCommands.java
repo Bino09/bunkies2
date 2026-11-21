@@ -115,6 +115,164 @@ public class ModCommands {
                                 )
                         ).build()
         );
+        commands.register(
+                (Commands.literal("kit")
+                        .then(Commands.literal("save")
+                                .then(Commands.argument("kit name", StringArgumentType.word())
+                                        .executes(ctx -> {
+                                            if (!(ctx.getSource().getSender() instanceof Player)) {
+                                                return 0;
+                                            }
+                                            Player player = (Player) ctx.getSource().getSender();
+                                            String name = ctx.getArgument("kit name", String.class);
+                                            Component message = KitsManager.saveKit(player, name, plugin);
+                                            ctx.getSource().getSender().sendMessage(message);
+                                            return 1;
+                                        })))
+                        .then(Commands.literal("load")
+                                .then(Commands.argument("kit name", StringArgumentType.word())
+                                        .suggests((ctx, builder) -> {
+                                            List<String> kits = plugin.getConfig().getStringList("kits.kitsList");
+
+                                            for (String kit : kits) {
+                                                builder.suggest(kit);
+                                            }
+                                            return builder.buildFuture();
+                                        })
+                                        .executes(ctx -> {
+                                            if (!(ctx.getSource().getSender() instanceof Player)) {
+                                                return 0;
+                                            }
+                                            Location player = ctx.getSource().getLocation();
+                                            Location atk1 = config.getLocation("zones.atk1");
+                                            Location atk2 = config.getLocation("zones.atk2");
+                                            Location def1 = config.getLocation("zones.def1");
+                                            Location def2 = config.getLocation("zones.def2");
+                                            Player player1 = ((Player) ctx.getSource().getSender()).getPlayer();
+                                            if (playerManager.getAtk().contains(player1)) {
+                                                if((player.getBlockX() <= atk1.blockX() && player.getBlockX() >= atk2.blockX()) || (player.getBlockX() >= atk1.blockX() && player.getBlockX() <= atk2.blockX())) {
+                                                    if((player.getBlockY() <= atk1.blockY() && player.getBlockY() >= atk2.blockY()) || (player.getBlockY() >= atk1.blockY() && player.getBlockY() <= atk2.blockY())) {
+                                                        if((player.getBlockX() <= atk1.blockX() && player.getBlockX() >= atk2.blockX()) || (player.getBlockX() >= atk1.blockX() && player.getBlockX() <= atk2.blockX())) {
+                                                            String name = ctx.getArgument("kit name", String.class);
+                                                            Component message = KitsManager.loadKit(player1, name, plugin);
+                                                            try {
+                                                                modListener.checkArmour(player1);
+                                                            } catch (Exception ignored) {
+
+
+                                                            }
+                                                            ctx.getSource().getSender().sendMessage(message);
+                                                        }
+                                                        else {
+                                                            player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                        }
+
+                                                    }
+                                                    else {
+                                                        player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                    }
+
+                                                }
+                                                else {
+                                                    player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                }
+                                            }
+                                            if (playerManager.getDef().contains(player1)) {
+                                                if((player.getBlockX() <= def1.blockX() && player.getBlockX() >= def2.blockX()) || (player.getBlockX() >= def1.blockX() && player.getBlockX() <= def2.blockX())) {
+                                                    if((player.getBlockY() <= def1.blockY() && player.getBlockY() >= def2.blockY()) || (player.getBlockY() >= def1.blockY() && player.getBlockY() <= def2.blockY())) {
+                                                        if((player.getBlockX() <= def1.blockX() && player.getBlockX() >= def2.blockX()) || (player.getBlockX() >= def1.blockX() && player.getBlockX() <= def2.blockX())) {
+                                                            String name = ctx.getArgument("kit name", String.class);
+                                                            Component message = KitsManager.loadKit(player1, name, plugin);
+                                                            try {
+                                                                modListener.checkArmour(player1);
+                                                            } catch (Exception ignored) {
+
+                                                            }
+                                                            ctx.getSource().getSender().sendMessage(message);
+
+                                                        }
+                                                        else {
+                                                            player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                        }
+
+                                                    }
+                                                    else {
+                                                        player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                    }
+
+                                                }
+                                                else {
+                                                    player1.sendMessage(Component.text("Get in the Rekit Zone Chud"));
+                                                }
+                                            }
+
+
+
+                                            return 1;
+                                        })))
+                        .then(Commands.literal("list")
+                                .executes(ctx -> {
+                                    if (!(ctx.getSource().getSender() instanceof Player)) {
+                                        return 0;
+                                    }
+                                    List<String> kitsList = KitsManager.listKits(plugin);
+                                    String len = Integer.toString(kitsList.size());
+                                    if (len.equals("0")) {
+                                        Component message = Component.text("There are no kits saved").color(NamedTextColor.RED);
+                                        ctx.getSource().getSender().sendMessage(message);
+                                        return 1;
+                                    } else if (len.equals("1")) {
+                                        Component message = Component.text("There is 1 kit saved").color(NamedTextColor.GREEN);
+                                        ctx.getSource().getSender().sendMessage(message);
+                                    } else {
+                                        Component message = Component.text("There are " + len + " saved kits:").color(NamedTextColor.GREEN);
+                                        ctx.getSource().getSender().sendMessage(message);
+                                    }
+                                    for (int i = 0; i< kitsList.size(); i++) {
+                                        int index = i+1;
+                                        Component message = Component.text("[" + index + "] " + kitsList.get(i)).color(NamedTextColor.GREEN);
+                                        ctx.getSource().getSender().sendMessage(message);
+                                    }
+                                    return 1;
+                                }))
+                        .then(Commands.literal("delete")
+                                .then(Commands.argument("kitName", StringArgumentType.word())
+                                        .suggests((ctx, builder) -> {
+                                            Player player = (Player) ctx.getSource().getSender();
+                                            String uuid = player.getUniqueId().toString();
+                                            List<String> kits = plugin.getConfig().getStringList("kits.kitsList");
+
+                                            for (String kit : kits) {
+                                                if (ctx.getSource().getSender().isOp()) {
+                                                    builder.suggest(kit);
+                                                } else {
+                                                    if (plugin.getConfig().getString("kits.kits." + kit + ".player").equals(uuid)) {
+                                                        builder.suggest(kit);
+                                                    }
+                                                }
+                                            }
+
+                                            return builder.buildFuture();
+                                        })
+                                        .executes(ctx -> {
+                                            if (!(ctx.getSource().getSender() instanceof Player)) {
+                                                return 0;
+                                            }
+
+                                            Player player = (Player) ctx.getSource().getSender();
+                                            String name = ctx.getArgument("kitName", String.class);
+                                            Boolean op = ctx.getSource().getSender().isOp();
+
+                                            Component message =
+                                                    KitsManager.deleteKit(player, name, op, plugin);
+
+                                            ctx.getSource().getSender().sendMessage(message);
+                                            return 1;
+                                        }))
+                        )
+                        .build()
+                ));
+
 
         commands.register(
                 Commands.literal("setWarp")

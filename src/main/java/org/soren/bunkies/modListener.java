@@ -75,7 +75,7 @@ public class modListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(GameManager.getGameStatus() == 1 && (playerManager.getAtk().contains(player) || playerManager.getDef().contains(player))) {
+        if(GameManager.getGameStatus() == 1 && !(playerManager.getAtk().contains(player) || playerManager.getDef().contains(player))) {
             LivesManager.addPlayer(player.getUniqueId());
         }
     }
