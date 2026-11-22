@@ -14,6 +14,19 @@ import java.util.UUID;
 
 public class KitsManager {
 
+    public static boolean CheckIfBlacklisted (ItemStack item, Bunkies2 plugin) {
+        if (item == null || item.isEmpty()) {
+            return false;
+        }
+        List<String> blackList = plugin.getConfig().getStringList("kits.blackList");
+        for (int i = 0; i<blackList.size(); i++) {
+            if (item.getType().getKey().toString().equals(blackList.get(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String ItemStackToBase64 (ItemStack item) {
         if (item == null || item.isEmpty()) {
             return null;
@@ -35,6 +48,7 @@ public class KitsManager {
     public static Component saveKit(Player player, String name, Bunkies2 plugin) {
         UUID uuidObj = player.getUniqueId();
         String uuid = uuidObj.toString();
+        Boolean checkBlacklist = true;
         if (plugin.getConfig().getInt("kits.users."+uuid, 0)>=plugin.getConfig().getInt("kits.settings.max-kits-per-player")) {
             Component message = Component.text("You cannot create any more kits: maximum quantity allowed per player is "+plugin.getConfig().getInt("kits.settings.max-kits-per-player")).color(NamedTextColor.RED);
             return message;
@@ -46,10 +60,50 @@ public class KitsManager {
         PlayerInventory inv = player.getInventory();
 
         ItemStack helmet = inv.getHelmet();
+        checkBlacklist = CheckIfBlacklisted(helmet, plugin);
+        if (checkBlacklist) {
+            Component message = Component.text("You cannot save this kit as it contains blacklisted items").color(NamedTextColor.RED);
+            return message;
+        }
         ItemStack chestplate = inv.getChestplate();
+        checkBlacklist = CheckIfBlacklisted(chestplate, plugin);
+        if (checkBlacklist) {
+            Component message = Component.text("You cannot save this kit as it contains blacklisted items").color(NamedTextColor.RED);
+            return message;
+        }
         ItemStack leggins = inv.getLeggings();
+        checkBlacklist = CheckIfBlacklisted(leggins, plugin);
+        if (checkBlacklist) {
+            Component message = Component.text("You cannot save this kit as it contains blacklisted items").color(NamedTextColor.RED);
+            return message;
+        }
         ItemStack boots = inv.getBoots();
+        checkBlacklist = CheckIfBlacklisted(boots, plugin);
+        if (checkBlacklist) {
+            Component message = Component.text("You cannot save this kit as it contains blacklisted items").color(NamedTextColor.RED);
+            return message;
+        }
         ItemStack offHand = inv.getItemInOffHand();
+        checkBlacklist = CheckIfBlacklisted(offHand, plugin);
+        if (checkBlacklist) {
+            Component message = Component.text("You cannot save this kit as it contains blacklisted items").color(NamedTextColor.RED);
+            return message;
+        }
+
+        for (int i = 0; i<36; i++) {
+            ItemStack item = inv.getItem(i);
+            checkBlacklist = CheckIfBlacklisted(item, plugin);
+            if (checkBlacklist) {
+                Component message = Component.text("You cannot save this kit as it contains blacklisted items").color(NamedTextColor.RED);
+                return message;
+            }
+        }
+
+        for (int i = 0; i<36; i++) {
+            ItemStack item = inv.getItem(i);
+            String item64 = ItemStackToBase64(item);
+            plugin.getConfig().set("kits.kits."+name+"."+i, item64);
+        }
 
         String helmet64 = ItemStackToBase64(helmet);
         String chestplate64 = ItemStackToBase64(chestplate);
@@ -62,12 +116,6 @@ public class KitsManager {
         plugin.getConfig().set("kits.kits."+name+".leggins", leggins64);
         plugin.getConfig().set("kits.kits."+name+".boots", boots64);
         plugin.getConfig().set("kits.kits."+name+".offHand", offHand64);
-
-        for (int i = 0; i<36; i++) {
-            ItemStack item = inv.getItem(i);
-            String item64 = ItemStackToBase64(item);
-            plugin.getConfig().set("kits.kits."+name+"."+i, item64);
-        }
 
         plugin.getConfig().set("kits.kits."+name+".player", uuid);
         int num = plugin.getConfig().getInt("kits.users."+uuid, 0);
@@ -139,5 +187,36 @@ public class KitsManager {
         plugin.getConfig().set("kits.kits."+name, null);
         plugin.saveConfig();
         return (Component.text("Kit "+name+" deleted successfully").color(NamedTextColor.GREEN));
+    }
+
+    public static Component addBlacklistedItem(String item, Bunkies2 plugin) {
+        List<String> blackList = plugin.getConfig().getStringList("kits.blackList");
+        item = "minecraft:"+item;
+        if (blackList.contains(item)) {
+            Component message = Component.text("This item is already blacklisted").color(NamedTextColor.RED);
+            return message;
+        }
+        blackList.add(item);
+        plugin.getConfig().set("kits.blackList", blackList);
+        Component message = Component.text("Item successfully blacklisted").color(NamedTextColor.GREEN);
+        return message;
+    }
+
+    public static Component removeBlacklistedItem(String item, Bunkies2 plugin) {
+        List<String> blackList = plugin.getConfig().getStringList("kits.blackList");
+        item = "minecraft:"+item;
+        if (!(blackList.contains(item))) {
+            Component message = Component.text("This item is not blacklisted").color(NamedTextColor.RED);
+            return message;
+        }
+        blackList.remove(item);
+        plugin.getConfig().set("kits.blackList", blackList);
+        Component message = Component.text("Item successfully unblacklisted").color(NamedTextColor.GREEN);
+        return message;
+    }
+
+    public static List<String> listBlackList(Bunkies2 plugin) {
+        List<String> blackList = plugin.getConfig().getStringList("kits.blackList");
+        return blackList;
     }
 }
