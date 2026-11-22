@@ -13,6 +13,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.soren.bunkies.Bunkies2;
+import org.soren.bunkies.modListener;
+import vg.civcraft.mc.namelayer.GroupManager;
+import vg.civcraft.mc.namelayer.group.Group;
+import vg.civcraft.mc.namelayer.permission.*;
+
+
+
 
 
 public class TeamManager {
@@ -29,14 +36,28 @@ public class TeamManager {
 
 
     }
+
     public static void unregisterTeams() {
         Team team = board.getTeam("atk");
+        assert team != null;
         team.unregister();
         team = board.getTeam("def");
+        assert team != null;
         team.unregister();
 
     }
+
     public static void addDef(Player player) {
+        Group defnl = GroupManager.getGroup("def");
+        Group atknl = GroupManager.getGroup("atk");
+        try {
+            atknl.removeMember(player.getUniqueId());
+        }
+        catch (Exception ignore){}
+
+        defnl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+
+
         Location def1 = config.getLocation("warps.def1");
         Location defwarp = config.getLocation("warps.def");
         Team def = board.getTeam("def");
@@ -46,8 +67,7 @@ public class TeamManager {
         if (GameManager.getGameStatus() == 1) {
             player.teleport(defwarp);
 
-        }
-        else {
+        } else {
             player.teleport(def1);
 
         }
@@ -57,10 +77,17 @@ public class TeamManager {
         def.addPlayer(player);
 
 
-
-
     }
+
     public static void addAtk(Player player) {
+        Group defnl = GroupManager.getGroup("def");
+        try {
+            defnl.removeMember(player.getUniqueId());
+        }
+        catch (Exception ignore){}
+        Group atknl = GroupManager.getGroup("atk");
+        atknl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+
         Location atk1 = config.getLocation("warps.atk1");
         Location atkwarp = config.getLocation("warps.atk");
 
@@ -71,9 +98,9 @@ public class TeamManager {
         player.setGameMode(GameMode.SURVIVAL);
         if (GameManager.getGameStatus() == 1) {
             player.teleport(atkwarp);
+            player.setGameMode(GameMode.SURVIVAL);
 
-        }
-        else {
+        } else {
             player.teleport(atk1);
 
         }
@@ -82,27 +109,43 @@ public class TeamManager {
 
 
     }
-    public static void swapPlayer(Player player){
+
+    public static void swapPlayer(Player player) {
         Team def = board.getTeam("def");
         Team atk = board.getTeam("atk");
+        Group defnl = GroupManager.getGroup("def");
+        Group atknl = GroupManager.getGroup("atk");
 
-        if(def.hasPlayer(player)) {
+        if (def.hasPlayer(player)) {
             def.removePlayer(player);
+            defnl.removeMember(player.getUniqueId());
+
 
             addAtk(player);
+            atknl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+
             playerManager.swapDef(player);
 
 
         } else if (atk.hasPlayer(player)) {
             atk.removePlayer(player);
+            atknl.removeMember(player.getUniqueId());
+
 
             addDef(player);
+            defnl.addMember(player.getUniqueId(), GroupManager.PlayerType.ADMINS);
+
             playerManager.swapAtk(player);
 
-            
-        }
-    }
 
+        }
+        try {
+            modListener.checkArmour(player);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
 
 

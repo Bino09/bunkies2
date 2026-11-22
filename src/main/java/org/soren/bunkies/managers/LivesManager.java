@@ -1,6 +1,9 @@
 package org.soren.bunkies.managers;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -18,6 +21,9 @@ public class LivesManager {
 
 
     }
+    public static void addPlayer(UUID uuid) {
+        lives.put(uuid, 2);
+    }
     public static void validDeath(UUID uuid) {
 
         int life = lives.get(uuid);
@@ -32,11 +38,24 @@ public class LivesManager {
 
         return numberLives;
     }
-    public static void setLives(UUID uuid, int amount) {
+    public static void setLives(UUID uuid, int amount, Player player) {
         int life = lives.get(uuid);
+        if(life < 0) {
+            life = amount;
+            lives.remove(uuid);
+            lives.put(uuid,life);
+            player.setGameMode(GameMode.SURVIVAL);
+        }
+        if(amount == 0) {
+            player.setGameMode(GameMode.SPECTATOR);
+            player.sendMessage(Component.text("You have been killed", TextColor.fromHexString("#f0bf3a")));
+        }
         life = amount;
         lives.remove(uuid);
         lives.put(uuid,life);
+        player.setGameMode(GameMode.SURVIVAL);
+
+        player.setGameMode(GameMode.SURVIVAL);
 
     }
 }

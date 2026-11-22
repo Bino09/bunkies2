@@ -8,10 +8,7 @@ import java.util.Random;
 
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldType;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 
@@ -46,7 +43,7 @@ public class playerManager {
         for (Player player : def) {
 
             TeamManager.addDef(player);
-
+            player.setGameMode(GameMode.ADVENTURE);
 
 
 
@@ -54,6 +51,7 @@ public class playerManager {
         for (Player player : atk) {
 
             TeamManager.addAtk(player);
+            player.setGameMode(GameMode.ADVENTURE);
 
         }
         team = new Teams(def, atk);
