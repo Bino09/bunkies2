@@ -3,6 +3,16 @@ kits:
     max-kits-per-player: 3
   users:
   kitsList: []
+  blackList:
+    - "minecraft:end_crystal"
+    - "minecraft:respawn_anchor"
+    - "minecraft:iron_helmet"
+    - "minecraft:iron_chestplate"
+    - "minecraft:iron_leggins"
+    - "minecraft:iron_boots"
+    - "minecraft:iron_sword"
+    - "minecraft:iron_axe"
+    - "minecraft:iron_pickaxe"
   kits:
 warps:
   atk:
