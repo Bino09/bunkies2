@@ -116,7 +116,7 @@ public class ModCommands {
                         ).build()
         );
         commands.register(
-                (Commands.literal("kit")
+                Commands.literal("kit")
                         .then(Commands.literal("save")
                                 .then(Commands.argument("kit name", StringArgumentType.word())
                                         .executes(ctx -> {
@@ -268,11 +268,67 @@ public class ModCommands {
 
                                             ctx.getSource().getSender().sendMessage(message);
                                             return 1;
-                                        }))
-                        )
-                        .build()
-                ));
+                                        })))
+                        .then(Commands.literal("blacklist")
+                                .then(Commands.literal("add")
+                                        .requires(src -> src.getSender().isOp())
+                                        .then(Commands.argument("item", StringArgumentType.word())
+                                                .executes(ctx -> {
+                                                    if (!(ctx.getSource().getSender() instanceof Player)) {
+                                                        return 0;
+                                                    }
+                                                    String item = ctx.getArgument("item", String.class);
+                                                    Component message = KitsManager.addBlacklistedItem(item, plugin);
+                                                    ctx.getSource().getSender().sendMessage(message);
+                                                    return 1;
+                                                })))
+                                .then(Commands.literal("remove")
+                                        .requires(src -> src.getSender().isOp())
+                                        .then(Commands.argument("item", StringArgumentType.word())
+                                                .suggests((ctx, builder) -> {
+                                                    List<String> blackList = plugin.getConfig().getStringList("kits.blackList");
 
+                                                    for (String item : blackList) {
+                                                        builder.suggest(item);
+                                                    }
+                                                    return builder.buildFuture();
+                                                })
+                                                .executes(ctx -> {
+                                                    if (!(ctx.getSource().getSender() instanceof Player)) {
+                                                        return 0;
+                                                    }
+                                                    String item = ctx.getArgument("item", String.class);
+                                                    Component message = KitsManager.removeBlacklistedItem(item, plugin);
+                                                    ctx.getSource().getSender().sendMessage(message);
+                                                    return 1;
+                                                })))
+                                .then(Commands.literal("list")
+                                        .executes(ctx -> {
+                                            if (!(ctx.getSource().getSender() instanceof Player)) {
+                                                return 0;
+                                            }
+                                            List<String> blackList = KitsManager.listBlackList(plugin);
+                                            String len = Integer.toString(blackList.size());
+                                            if (len.equals("0")) {
+                                                Component message = Component.text("There are no blacklisted items").color(NamedTextColor.RED);
+                                                ctx.getSource().getSender().sendMessage(message);
+                                                return 1;
+                                            } else if (len.equals("1")) {
+                                                Component message = Component.text("There is 1 blacklisted item").color(NamedTextColor.GREEN);
+                                                ctx.getSource().getSender().sendMessage(message);
+                                            } else {
+                                                Component message = Component.text("There are " + len + " blacklisted items:").color(NamedTextColor.GREEN);
+                                                ctx.getSource().getSender().sendMessage(message);
+                                            }
+                                            for (int i = 0; i< blackList.size(); i++) {
+                                                int index = i+1;
+                                                Component message = Component.text("[" + index + "] " + blackList.get(i)).color(NamedTextColor.GREEN);
+                                                ctx.getSource().getSender().sendMessage(message);
+                                            }
+                                            return 1;
+                                        }))
+                        ).build()
+        );
 
         commands.register(
                 Commands.literal("setWarp")
